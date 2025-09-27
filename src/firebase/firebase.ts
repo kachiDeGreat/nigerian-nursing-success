@@ -3,13 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDONZzA56ECLswBmLXeKhjOraC2WnyW-NU",
-  authDomain: "nigerian-nursing-success.firebaseapp.com",
-  projectId: "nigerian-nursing-success",
-  storageBucket: "nigerian-nursing-success.firebasestorage.app",
-  messagingSenderId: "710748670639",
-  appId: "1:710748670639:web:80c9874b745e4564e4a25a",
-  measurementId: "G-KZERHSSQK6",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
