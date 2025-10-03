@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/ExamFeatures.module.css";
+import { useNavigate } from "react-router-dom";
 
 const ExamFeatures: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
   const [questionCount, setQuestionCount] = useState(0);
   const featuresRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
+  const handleGetStarted = () => {
+    navigate("/account");
+  };
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -185,7 +190,7 @@ const ExamFeatures: React.FC = () => {
               Experience the quality and format of our exam questions. Every
               question includes detailed explanations to help you learn.
             </p>
-            <button className={styles.sampleButton}>
+            <button className={styles.sampleButton} onClick={handleGetStarted}>
               <span>Try Sample Questions</span>
               <span className={styles.buttonArrow}>→</span>
             </button>
@@ -227,11 +232,14 @@ const ExamFeatures: React.FC = () => {
               our comprehensive question bank.
             </p>
             <div className={styles.ctaActions}>
-              <button className={styles.ctaPrimary}>
+              <button className={styles.ctaPrimary} onClick={handleGetStarted}>
                 <span>Get Started - ₦4,000</span>
                 <span className={styles.buttonArrow}>→</span>
               </button>
-              <button className={styles.ctaSecondary}>
+              <button
+                className={styles.ctaSecondary}
+                onClick={handleGetStarted}
+              >
                 View Sample Questions
               </button>
             </div>

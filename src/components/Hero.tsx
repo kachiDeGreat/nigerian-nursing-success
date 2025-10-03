@@ -9,10 +9,6 @@ const Hero: React.FC = () => {
     navigate("/account");
   };
 
-  const handleWhatsAppClick = () => {
-    window.open("https://wa.me/2348123456789", "_blank");
-  };
-
   return (
     <>
       <section id="home" className={styles.hero}>
@@ -41,8 +37,7 @@ const Hero: React.FC = () => {
                 </h1>
                 <p className={styles.subtitle}>
                   10,000+ authentic Nigerian nursing questions, real exam
-                  simulations. Everything
-                  you need to succeed.
+                  simulations. Everything you need to succeed.
                 </p>
 
                 <div className={styles.features}>
@@ -117,12 +112,6 @@ const Hero: React.FC = () => {
           <div className={styles.scrollArrow}>↓</div>
         </div>
       </section>
-
-      {/* WhatsApp Button */}
-      <button className={styles.whatsappButton} onClick={handleWhatsAppClick}>
-        <span className={styles.whatsappIcon}>💬</span>
-        <span className={styles.whatsappText}>Need Help?</span>
-      </button>
     </>
   );
 };

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/AboutUs.module.css";
+import { useNavigate } from "react-router-dom";
 
 const AboutUs: React.FC = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
   const [counts, setCounts] = useState({
@@ -12,6 +14,10 @@ const AboutUs: React.FC = () => {
   });
   const statsRef = useRef<HTMLDivElement>(null);
 
+
+  const handleGetStarted = () => {
+    navigate("/account");
+  };
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -178,7 +184,7 @@ const AboutUs: React.FC = () => {
 
             {/* CTA Button */}
             <div className={styles.ctaWrapper}>
-              <button className={styles.ctaButton}>
+              <button className={styles.ctaButton} onClick={handleGetStarted}>
                 <span>Start Your Journey - ₦4,000</span>
                 <span className={styles.ctaArrow}>→</span>
               </button>
