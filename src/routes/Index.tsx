@@ -5,9 +5,11 @@ import VerifyEmail from "../pages/VerifyEmail";
 import VerifySuccess from "../pages/VerifySuccess";
 import ResetPassword from "../pages/ResetPassword";
 import ActionHandler from "../pages/ActionHandler";
+import ScrollToTop from "../components/ScrollToTop";
 function Index() {
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/welcome" element={<Welcome />} />
@@ -22,4 +24,3 @@ function Index() {
 }
 
 export default Index;
- 

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../styles/Welcome.module.css";
 
-
 const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
@@ -169,7 +168,24 @@ const Footer: React.FC = () => {
           {/* Bottom Footer */}
           <div className={styles.footerBottom}>
             <div className={styles.footerCopyright}>
-              <p>&copy; 2024 Nigerian Nursing Success. All rights reserved.</p>
+              <p>
+                &copy; 2024 Nigerian Nursing Success. All rights reserved.{" "}
+                <span>
+                  Website by{" "}
+                  <a
+                    style={{
+                      fontWeight: "bold",
+                      textDecoration: "none",
+                      color: "#dc2626",
+                    }}
+                    href="http://"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    kachiDeGreat
+                  </a>
+                </span>
+              </p>
             </div>
             <div className={styles.footerBadges}>
               <div className={styles.badge}>🇳🇬 Proudly Nigerian</div>

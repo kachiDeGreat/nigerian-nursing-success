@@ -1,15 +1,17 @@
 import React from "react";
 import styles from "../styles/CTASection.module.css";
+import { useNavigate } from "react-router-dom";
 
 const CTASection: React.FC = () => {
+  const navigate = useNavigate();
+
   const handleGetStarted = () => {
-    // Add your get started logic here
+    navigate("/account");
     console.log("Get Started clicked");
   };
 
   const handleContactSales = () => {
-    // Add your contact sales logic here
-    console.log("Contact Sales clicked");
+    window.open("https://wa.me/2348100790074", "_blank");
   };
 
   return (

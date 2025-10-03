@@ -6,7 +6,7 @@
 }
 
 .about::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -198,13 +198,17 @@
 }
 
 .missionBox::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(220, 38, 38, 0.1) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
   transform: translate(30%, -30%);
 }
@@ -351,7 +355,7 @@
 }
 
 .statsBar::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -502,7 +506,7 @@
   .ctaButton {
     width: 100%;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 0.875rem 1.5rem;
   }
 
