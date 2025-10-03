@@ -211,16 +211,20 @@
   border-color: 1px solid #dc2626;
 }
 .primary::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s;
 }
-
 
 .primary:hover::before {
   left: 100%;
@@ -623,4 +627,39 @@
 
 .verificationHelp li {
   margin-bottom: var(--spacing-2);
+}
+
+/* Add to your existing Form.module.css */
+
+.passwordToggle {
+  position: absolute;
+  right: var(--spacing-4);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.passwordToggle:hover {
+  background-color: var(--gray-100);
+}
+
+.passwordToggle:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Adjust input padding to accommodate the toggle button */
+.inputGroup .input {
+  padding-right: var(--spacing-12);
 }

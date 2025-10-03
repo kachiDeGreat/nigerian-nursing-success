@@ -1,4 +1,3 @@
-// src/SignUp.tsx
 import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -11,13 +10,13 @@ import styles from "../styles/Form.module.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// 💡 EDITED: Import actionCodeSettings
 import { auth, actionCodeSettings } from "../firebase/firebase";
 
 const SignUp = () => {
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -35,12 +34,10 @@ const SignUp = () => {
       await updateProfile(userCredential.user, {
         displayName: fullName,
       });
-      // 💡 ADD THIS LINE FOR DEBUGGING
       console.log(
         "Sending verification email with settings:",
         actionCodeSettings
       );
-      // 💡 EDITED: Pass the actionCodeSettings to generate the correct localhost URL
       await sendEmailVerification(userCredential.user, actionCodeSettings);
 
       console.log("Account created successfully!", userCredential.user);
@@ -84,6 +81,10 @@ const SignUp = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.decorativeElement}></div>
@@ -116,13 +117,52 @@ const SignUp = () => {
         <div className={styles.inputGroup}>
           <input
             className={styles.input}
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
           />
           <span className={styles.inputIcon}>🔒</span>
+          <button
+            type="button"
+            className={styles.passwordToggle}
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              // Eye Off SVG
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7 19 2.73 15.11 1 12c.58-1.03 1.32-2.01 2.2-2.9M9.88 9.88A3 3 0 0 1 14.12 14.12M6.1 6.1l11.8 11.8" />
+              </svg>
+            ) : (
+              // Eye SVG
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            )}
+          </button>
         </div>
         <button
           type="submit"

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"; // 💡 1. Import useRef
+import { useState, useEffect, useRef } from "react";
 import { confirmPasswordReset, verifyPasswordResetCode } from "firebase/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { auth } from "../firebase/firebase";
@@ -8,13 +8,15 @@ import styles from "../styles/Form.module.css";
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isValidCode, setIsValidCode] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // 💡 2. Use useRef for the lock instead of useState
   const verificationAttempted = useRef(false);
 
   const oobCode = searchParams.get("oobCode");
@@ -26,9 +28,7 @@ const ResetPassword = () => {
       return;
     }
 
-    // 💡 3. Check the .current property of the ref
     if (!verificationAttempted.current) {
-      // 💡 4. Set the .current property to engage the lock. This does NOT cause a re-render.
       verificationAttempted.current = true;
 
       verifyPasswordResetCode(auth, oobCode)
@@ -43,7 +43,6 @@ const ResetPassword = () => {
           navigate("/account");
         });
     }
-    // 💡 5. The ref object itself is stable, so we don't need it in the dependency array.
   }, [oobCode, navigate]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -89,6 +88,14 @@ const ResetPassword = () => {
     }
   };
 
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   if (!isValidCode) {
     return (
       <div className={styles.authPage}>
@@ -127,7 +134,7 @@ const ResetPassword = () => {
                 <div className={styles.inputGroup}>
                   <input
                     className={styles.input}
-                    type="password"
+                    type={showNewPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="New Password"
@@ -135,11 +142,52 @@ const ResetPassword = () => {
                     minLength={6}
                   />
                   <span className={styles.inputIcon}>🔑</span>
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={toggleNewPasswordVisibility}
+                    aria-label={
+                      showNewPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showNewPassword ? (
+                      // Eye Off SVG
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7 19 2.73 15.11 1 12c.58-1.03 1.32-2.01 2.2-2.9M9.88 9.88A3 3 0 0 1 14.12 14.12M6.1 6.1l11.8 11.8" />
+                      </svg>
+                    ) : (
+                      // Eye SVG
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
                 <div className={styles.inputGroup}>
                   <input
                     className={styles.input}
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm New Password"
@@ -147,6 +195,47 @@ const ResetPassword = () => {
                     minLength={6}
                   />
                   <span className={styles.inputIcon}>🔑</span>
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={toggleConfirmPasswordVisibility}
+                    aria-label={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showConfirmPassword ? (
+                      // Eye Off SVG
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7 19 2.73 15.11 1 12c.58-1.03 1.32-2.01 2.2-2.9M9.88 9.88A3 3 0 0 1 14.12 14.12M6.1 6.1l11.8 11.8" />
+                      </svg>
+                    ) : (
+                      // Eye SVG
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
                 </div>
                 <button
                   type="submit"
