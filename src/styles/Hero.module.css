@@ -1,0 +1,781 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  background: #0f172a;
+  overflow: hidden;
+}
+
+/* Fixed Background Container */
+.backgroundContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.85) 0%,
+    rgba(30, 41, 59, 0.75) 50%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
+  z-index: 2;
+}
+
+/* Content Section */
+.content {
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 80px 1rem 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* Text Section */
+.textSection {
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: white;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(5px);
+}
+
+.featureIcon {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.primaryButton:hover::before {
+  left: 100%;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.4);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+.buttonText {
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.buttonArrow {
+  transition: transform 0.3s ease;
+  font-size: 1.25rem;
+}
+
+.primaryButton:hover .buttonArrow {
+  transform: translateX(4px);
+}
+
+.trustIndicators {
+  display: flex;
+  gap: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trustItem {
+  white-space: nowrap;
+}
+
+.trustItem strong {
+  color: #f59e0b;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Visual Section - Exam Card */
+.visualSection {
+  display: none;
+}
+
+.examCard {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 400px;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+}
+
+.examCard:hover {
+  transform: translateY(-5px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.cardBadge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cardTimer {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.cardContent {
+  text-align: left;
+}
+
+.question {
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.option {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.option:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.option.active {
+  border-color: #dc2626;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* Scroll Hint */
+.scrollHint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  text-align: center;
+  z-index: 4;
+  animation: bounce 2s infinite;
+}
+
+.scrollArrow {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-3px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* WhatsApp Button */
+.whatsappButton {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+  z-index: 1000;
+  font-weight: 600;
+  font-size: 0.875rem;
+  animation: pulse 2s infinite;
+}
+
+.whatsappButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+}
+
+.whatsappButton:active {
+  transform: translateY(0);
+}
+
+.whatsappIcon {
+  font-size: 1.25rem;
+}
+
+.whatsappText {
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+  }
+  100% {
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+  }
+}
+
+/* ========== MOBILE FIRST RESPONSIVE ========== */
+
+/* Extra Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+  .content {
+    padding: 70px 0.75rem 1.5rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .features {
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    max-width: 100%;
+  }
+
+  .feature {
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .primaryButton {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    max-width: 100%;
+  }
+
+  .buttonText {
+    font-size: 0.875rem;
+  }
+
+  .trustIndicators {
+    gap: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .trustItem strong {
+    font-size: 0.875rem;
+  }
+
+  .scrollHint {
+    bottom: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .whatsappButton {
+    bottom: 1rem;
+    right: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .whatsappIcon {
+    font-size: 1.125rem;
+  }
+
+  .heroImage {
+    object-position: center 30%;
+  }
+
+  .imageOverlay {
+    background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.92) 0%,
+      rgba(30, 41, 59, 0.88) 50%,
+      rgba(15, 23, 42, 0.92) 100%
+    );
+  }
+}
+
+/* Small Mobile (481px - 640px) */
+@media (min-width: 481px) and (max-width: 640px) {
+  .primaryButton {
+    max-width: 300px;
+  }
+
+  .features {
+    max-width: 100%;
+  }
+}
+
+/* Tablet Portrait (641px - 768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .content {
+    padding: 80px 1.5rem 2rem;
+  }
+
+  .primaryButton {
+    max-width: 320px;
+  }
+}
+
+/* Tablet Landscape & Small Desktop (769px - 1023px) */
+@media (min-width: 769px) {
+  .mainContent {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .textSection {
+    text-align: left;
+  }
+
+  .badge {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .subtitle {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .features {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+
+  .actions {
+    align-items: flex-start;
+  }
+
+  .primaryButton {
+    max-width: fit-content;
+  }
+
+  .trustIndicators {
+    justify-content: flex-start;
+  }
+
+  .visualSection {
+    display: block;
+  }
+
+  .content {
+    padding: 0 2rem;
+  }
+
+  .scrollHint {
+    bottom: 1.5rem;
+  }
+}
+
+/* Desktop (1024px - 1279px) */
+@media (min-width: 1024px) {
+  .content {
+    padding: 0 3rem;
+  }
+
+  .mainContent {
+    gap: 5rem;
+  }
+
+  .title {
+    font-size: 3.25rem;
+  }
+
+  .primaryButton {
+    padding: 1.125rem 2.25rem;
+    font-size: 1.125rem;
+  }
+
+  .buttonText {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Large Desktop (1280px+) */
+@media (min-width: 1280px) {
+  .content {
+    padding: 0 4rem;
+  }
+
+  .mainContent {
+    gap: 6rem;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .content {
+    padding-top: 70px;
+    padding-bottom: 1rem;
+  }
+
+  .mainContent {
+    gap: 2rem;
+  }
+
+  .badge {
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    padding: 0.375rem 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .features {
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .actions {
+    gap: 1rem;
+  }
+
+  .primaryButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .buttonText {
+    font-size: 0.8rem;
+  }
+
+  .trustIndicators {
+    font-size: 0.75rem;
+    gap: 1rem;
+  }
+
+  .scrollHint {
+    display: none;
+  }
+
+  .examCard {
+    padding: 1rem;
+  }
+
+  .question {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .option {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Landscape Tablet */
+@media (min-width: 769px) and (max-height: 700px) and (orientation: landscape) {
+  .mainContent {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .primaryButton {
+    padding: 1rem 2rem;
+    min-height: 48px;
+  }
+
+  .feature {
+    min-height: 44px;
+  }
+
+  .whatsappButton {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  .option {
+    min-height: 44px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .textSection,
+  .examCard {
+    animation: none;
+  }
+
+  .primaryButton:hover,
+  .examCard:hover,
+  .whatsappButton:hover,
+  .feature:hover {
+    transform: none;
+  }
+
+  .scrollHint,
+  .whatsappButton {
+    animation: none;
+  }
+
+  .primaryButton::before {
+    display: none;
+  }
+
+  .buttonArrow {
+    transition: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .imageOverlay {
+    background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.95) 0%,
+      rgba(30, 41, 59, 0.95) 50%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+  }
+
+  .badge,
+  .feature {
+    border-width: 2px;
+  }
+
+  .primaryButton {
+    box-shadow: 0 0 0 2px white;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .whatsappButton,
+  .scrollHint {
+    display: none;
+  }
+
+  .backgroundContainer {
+    position: absolute;
+  }
+
+  .imageOverlay {
+    background: rgba(15, 23, 42, 0.8);
+  }
+}

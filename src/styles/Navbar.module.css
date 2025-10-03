@@ -1,0 +1,259 @@
+.navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e2e8f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Logo Styles */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #0f172a;
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+}
+
+.logoHighlight {
+  color: #dc2626;
+}
+
+/* Desktop Navigation - 3 Links */
+.navLinks {
+  display: none;
+  list-style: none;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .navLinks {
+    display: flex;
+  }
+}
+
+.navLink {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.navLink:hover {
+  color: #dc2626;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #dc2626;
+  transition: width 0.2s ease;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+/* Single Get Started Button - Desktop */
+.authButtons {
+  display: none;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .authButtons {
+    display: flex;
+  }
+}
+
+.getStartedBtn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.getStartedBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* Mobile Menu Toggle */
+.menuToggle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .menuToggle {
+    display: none;
+  }
+}
+
+.hamburger {
+  width: 20px;
+  height: 2px;
+  background: #64748b;
+  transition: all 0.2s ease;
+}
+
+.menuToggle:hover .hamburger {
+  background: #dc2626;
+}
+
+/* Mobile Menu */
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobileMenuOpen {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobileNavLinks {
+  list-style: none;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobileNavLink {
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 1rem 0;
+  display: block;
+  border-bottom: 1px solid #f1f5f9;
+  transition: color 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.mobileNavLink:hover {
+  color: #dc2626;
+}
+
+.mobileNavLink:last-child {
+  border-bottom: none;
+}
+
+.mobileAuthButtons {
+  padding: 1.5rem 1rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobileGetStartedBtn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.mobileGetStartedBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Small Mobile (max 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  .logo {
+    font-size: 1rem;
+  }
+  
+  .logoIcon {
+    font-size: 1.25rem;
+  }
+  
+  .mobileNavLinks {
+    padding: 1rem 0.75rem;
+  }
+  
+  .mobileAuthButtons {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .getStartedBtn,
+  .mobileGetStartedBtn,
+  .hamburger {
+    transition: none;
+  }
+  
+  .getStartedBtn:hover,
+  .mobileGetStartedBtn:hover {
+    transform: none;
+  }
+  
+  .navLink::after {
+    transition: none;
+  }
+}
