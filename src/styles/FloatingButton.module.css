@@ -35,6 +35,7 @@
 
 .whatsappText {
   font-weight: 600;
+  margin-top: -5.5px;
 }
 
 @keyframes pulse {
