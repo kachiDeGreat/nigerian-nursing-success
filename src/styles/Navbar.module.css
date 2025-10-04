@@ -47,7 +47,7 @@
   padding: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
   .navLinks {
     display: flex;
   }
@@ -87,7 +87,7 @@
   align-items: center;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
   .authButtons {
     display: flex;
   }
@@ -122,7 +122,7 @@
   padding: 0.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 800px) {
   .menuToggle {
     display: none;
   }

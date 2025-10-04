@@ -40,7 +40,7 @@ const Login = () => {
 
       console.log("Logged in successfully!", userCredential.user);
       toast.success("Login successful! Redirecting...");
-      setTimeout(() => navigate("/welcome"), 1500);
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error logging in:", error.message);
@@ -58,7 +58,7 @@ const Login = () => {
       const userCredential = await signInWithPopup(auth, provider);
       console.log("Logged in with Google successfully!", userCredential.user);
       toast.success("Login with Google successful!");
-      setTimeout(() => navigate("/welcome"), 1500);
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Error signing in with Google:", error.message);

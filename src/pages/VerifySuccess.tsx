@@ -11,7 +11,7 @@ const VerifySuccess = () => {
   useEffect(() => {
     // If for some reason the countdown starts at 0 or less, navigate immediately.
     if (countdown <= 0) {
-      navigate("/welcome");
+      navigate("/dashboard");
       return;
     }
 
@@ -39,7 +39,7 @@ const VerifySuccess = () => {
           <div className={styles.formContainer}>
             <div className={styles.verificationContent}>
               <div className={styles.successIcon}>🎉</div>
-              <h2 className={styles.title}>Verification Successful!</h2>
+              {/* <h2 className={styles.title}>Verification Successful!</h2> */}
               <p className={styles.subtitle}>
                 Thank you for verifying your email address. You'll be redirected
                 to the welcome page in {countdown} seconds.
@@ -48,7 +48,7 @@ const VerifySuccess = () => {
                 <div className={styles.checkmark}>✓</div>
               </div>
               <button
-                onClick={() => navigate("/welcome")}
+                onClick={() => navigate("/dashboard")}
                 className={`${styles.button} ${styles.primary}`}
               >
                 Go to Welcome Page Now
