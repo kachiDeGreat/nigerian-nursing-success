@@ -63,7 +63,7 @@ const VerifyEmail = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser?.emailVerified) {
-        navigate("/welcome");
+        navigate("/dashboard");
       }
     });
     return () => unsubscribe();
