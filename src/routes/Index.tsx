@@ -23,13 +23,21 @@ function Index() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/action" element={<ActionHandler />} />
         <Route path="/admin/upload-questions" element={<QuestionUpload />} />
-        <Route path="/quiz" element={<QuizApp />} />
+        {/* <Route path="/quiz" element={<QuizApp />} /> */}
         {/* Protected Routes - Only accessible when logged in */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz"
+          element={
+            <ProtectedRoute>
+              <QuizApp />
             </ProtectedRoute>
           }
         />
