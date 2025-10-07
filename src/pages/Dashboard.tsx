@@ -332,7 +332,7 @@ const Dashboard: React.FC = () => {
                     <span className={styles.featureIcon}>✓</span>
                     Detailed performance analytics
                   </li>
-                  <li className={styles.featureItem}>
+                  <li className={styles.featureItem}> 
                     <span className={styles.featureIcon}>✓</span>
                     Mobile-friendly platform
                   </li>
@@ -508,7 +508,7 @@ const Dashboard: React.FC = () => {
                   className={`${styles.featureButton} ${styles.disabledButton}`}
                 >
                   Start Practice Test
-                  <span className={styles.comingSoonBadge}>Coming Soon</span>
+                  <span className={styles.comingSoonBadge}>Quiz App Launches Tomorrow</span>
                 </button>
               </div>
 
