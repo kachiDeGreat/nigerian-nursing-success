@@ -11,6 +11,28 @@ import type { UserData } from "../firebase/firestoreService";
 import { initializePayment, verifyPayment } from "../services/paystackService";
 import styles from "../styles/Dashboard.module.css";
 
+// WhatsApp Support Component
+const WhatsAppSupport: React.FC = () => {
+  const phoneNumber = "2349012345678"; // Replace with your actual WhatsApp number
+  const message = "Hello! I need help with Nigerian Nursing Success.";
+
+  const handleWhatsAppClick = () => {
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(url, "_blank");
+  };
+
+  return (
+    <button className={styles.whatsappSupport} onClick={handleWhatsAppClick}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.169-3.495-8.428" />
+      </svg>
+      <span className={styles.whatsappText}>Support</span>
+    </button>
+  );
+};
+
 // Paystack inline payment component
 const PaystackInlinePayment: React.FC<{
   email: string;
@@ -32,7 +54,7 @@ const PaystackInlinePayment: React.FC<{
     const handler = window.PaystackPop.setup({
       key: publicKey,
       email: email,
-      amount: amount * 100, // Convert to kobo
+      amount: amount * 100,
       currency: "NGN",
       ref: `ref-${Date.now()}`,
       onClose: () => {
@@ -51,61 +73,20 @@ const PaystackInlinePayment: React.FC<{
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: "rgba(0,0,0,0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          padding: "2rem",
-          borderRadius: "12px",
-          maxWidth: "400px",
-          width: "90%",
-          textAlign: "center",
-        }}
-      >
+    <div className={styles.paymentOverlay}>
+      <div className={styles.paymentModal}>
         <h3>Complete Your Payment</h3>
         <p>You'll be redirected to a secure payment page within this window.</p>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "1rem",
-            justifyContent: "center",
-            marginTop: "1.5rem",
-          }}
-        >
+        <div className={styles.paymentActions}>
           <button
             onClick={handlePaystackPayment}
             disabled={isProcessing}
-            style={{
-              background: "#0066FF",
-              color: "white",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-            }}
+            className={styles.proceedButton}
           >
             {isProcessing ? (
               <>
-                <div className={styles.spinner}></div>
+                {/* <div className={styles.spinner}></div> */}
                 Processing...
               </>
             ) : (
@@ -116,15 +97,7 @@ const PaystackInlinePayment: React.FC<{
           <button
             onClick={onClose}
             disabled={isProcessing}
-            style={{
-              background: "#6B7280",
-              color: "white",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
+            className={styles.cancelPaymentButton}
           >
             Cancel
           </button>
@@ -141,7 +114,7 @@ const Dashboard: React.FC = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaystackInline, setShowPaystackInline] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false); // Add loading state
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged(async (currentUser) => {
@@ -149,14 +122,10 @@ const Dashboard: React.FC = () => {
 
       if (currentUser) {
         try {
-          // Initialize user data if needed
           await initializeUserData(currentUser);
-
-          // Get user data from Firestore
           const data = await getUserData(currentUser.uid);
           setUserData(data);
 
-          // Show payment modal if user hasn't paid
           if (data && !data.isActive) {
             setTimeout(() => {
               setShowPaymentModal(true);
@@ -177,7 +146,6 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    // Real-time listener for user data changes
     const userRef = doc(db, "users", user.uid);
     const unsubscribeFirestore = onSnapshot(
       userRef,
@@ -203,17 +171,14 @@ const Dashboard: React.FC = () => {
       return;
     }
 
-    setIsProcessingPayment(true); // Start loading
-
+    setIsProcessingPayment(true);
     try {
-      // Initialize payment to get reference
       const paymentResponse = await initializePayment(user.email, 4000, {
         userId: user.uid,
         displayName: user.displayName || "",
       });
 
       if (paymentResponse.status) {
-        // Show Paystack inline payment
         setShowPaystackInline(true);
         setShowPaymentModal(false);
       } else {
@@ -223,7 +188,7 @@ const Dashboard: React.FC = () => {
       console.error("Payment initialization error:", error);
       toast.error("Payment service temporarily unavailable");
     } finally {
-      setIsProcessingPayment(false); // Stop loading
+      setIsProcessingPayment(false);
     }
   };
 
@@ -231,18 +196,14 @@ const Dashboard: React.FC = () => {
     if (!user) return;
 
     try {
-      // Verify the payment
       const verification = await verifyPayment(reference);
-
       if (verification.data.status === "success") {
-        // Update user status in Firestore
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
           paymentStatus: "paid",
           isActive: true,
           paystackReference: reference,
         });
-
         setShowPaystackInline(false);
         toast.success("Payment verified! Your account is now active.");
       } else {
@@ -267,6 +228,18 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const getUserInitials = (): string => {
+    if (user?.displayName) {
+      return user.displayName
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    return user?.email?.[0]?.toUpperCase() || "U";
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -277,11 +250,49 @@ const Dashboard: React.FC = () => {
   }
 
   if (!user) {
-    return null; // ProtectedRoute will handle redirect
+    return null;
+  }
+
+  function handlePracticeTests(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.preventDefault();
+    if (!userData?.isActive) {
+      toast.info("Please activate your account to access practice tests.");
+      setShowPaymentModal(true);
+      return;
+    }
+    navigate("/quiz");
   }
 
   return (
     <div className={styles.dashboard}>
+      {/* WhatsApp Support */}
+      <WhatsAppSupport />
+
+      {/* Navigation Bar */}
+      <nav className={styles.navbar}>
+        <div className={styles.navBrand}>
+          <h1 className={styles.brandTitle}>Nigerian Nursing Success</h1>
+        </div>
+
+        <div className={styles.navUser}>
+          <div className={styles.userProfile}>
+            <div className={styles.avatar}>{getUserInitials()}</div>
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>
+                {user?.displayName || "Nursing Student"}
+              </span>
+              <span className={styles.userEmail}>{user?.email}</span>
+            </div>
+          </div>
+          <button className={styles.logoutButton} onClick={handleLogout}>
+            <span className={styles.logoutIcon}>↩</span>
+            <span className={styles.logoutText}>Logout</span>
+          </button>
+        </div>
+      </nav>
+
       {/* Payment Modal */}
       {showPaymentModal && (
         <div className={styles.modalOverlay}>
@@ -310,23 +321,23 @@ const Dashboard: React.FC = () => {
                 <h4 className={styles.featuresTitle}>What you'll get:</h4>
                 <ul className={styles.features}>
                   <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✅</span>
+                    <span className={styles.featureIcon}>✓</span>
                     Access to 10,000+ nursing exam questions
                   </li>
                   <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✅</span>
+                    <span className={styles.featureIcon}>✓</span>
                     Timed practice tests with real exam simulation
                   </li>
                   <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✅</span>
+                    <span className={styles.featureIcon}>✓</span>
                     Detailed performance analytics
                   </li>
                   <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✅</span>
+                    <span className={styles.featureIcon}>✓</span>
                     Mobile-friendly platform
                   </li>
                   <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✅</span>
+                    <span className={styles.featureIcon}>✓</span>
                     24/7 access to study materials
                   </li>
                 </ul>
@@ -346,7 +357,7 @@ const Dashboard: React.FC = () => {
               >
                 {isProcessingPayment ? (
                   <>
-                    <div className={styles.spinner}></div>
+                    {/* <div className={styles.spinner}></div> */}
                     Initializing Payment...
                   </>
                 ) : (
@@ -370,7 +381,7 @@ const Dashboard: React.FC = () => {
       {showPaystackInline && user?.email && (
         <PaystackInlinePayment
           email={user.email}
-          amount={4000}
+          amount={40}
           publicKey={import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}
           onSuccess={handlePaymentSuccess}
           onClose={() => setShowPaystackInline(false)}
@@ -379,13 +390,59 @@ const Dashboard: React.FC = () => {
 
       <div className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>🎯 Dashboard</h1>
+          <h1 className={styles.title}>Dashboard</h1>
           <p className={styles.subtitle}>
-            Welcome to your nursing exam preparation platform!
+            Welcome back, {user?.displayName?.split(" ")[0] || "Student"}! Ready
+            to continue your preparation?
           </p>
         </header>
 
         <div className={styles.content}>
+          {/* Stats Grid */}
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>📊</div>
+              <div className={styles.statInfo}>
+                <div className={styles.statNumber}>
+                  {userData?.loginCount || 1}
+                </div>
+                <div className={styles.statLabel}>Total Logins</div>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>🧪</div>
+              <div className={styles.statInfo}>
+                <div className={styles.statNumber}>
+                  {userData?.testsTaken || 0}
+                </div>
+                <div className={styles.statLabel}>Tests Completed</div>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>⏱️</div>
+              <div className={styles.statInfo}>
+                <div className={styles.statNumber}>
+                  {userData?.totalStudyTime
+                    ? `${Math.round(userData.totalStudyTime / 60)}h`
+                    : "0h"}
+                </div>
+                <div className={styles.statLabel}>Study Time</div>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>📈</div>
+              <div className={styles.statInfo}>
+                <div className={styles.statNumber}>
+                  {userData?.averageScore ? `${userData.averageScore}%` : "--%"}
+                </div>
+                <div className={styles.statLabel}>Average Score</div>
+              </div>
+            </div>
+          </div>
+
           {/* Account Status Card */}
           <div className={styles.statusCard}>
             <div className={styles.statusHeader}>
@@ -402,24 +459,24 @@ const Dashboard: React.FC = () => {
             <div className={styles.statusContent}>
               {userData?.isActive ? (
                 <div className={styles.activeStatus}>
-                  <div className={styles.successIcon}>✅</div>
+                  <div className={styles.successIcon}>✓</div>
                   <div>
-                    <h4 className={styles.activeTitle}>Account Activated!</h4>
+                    <h4 className={styles.activeTitle}>Account Activated</h4>
                     <p className={styles.activeText}>
-                      You have full access to all nursing exam questions and
+                      Full access to all nursing exam questions and premium
                       features.
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className={styles.inactiveStatus}>
-                  <div className={styles.warningIcon}>⚠️</div>
+                  <div className={styles.warningIcon}>!</div>
                   <div>
                     <h4 className={styles.inactiveTitle}>
                       Account Not Activated
                     </h4>
                     <p className={styles.inactiveText}>
-                      Complete your payment to access all features and exam
+                      Complete your payment to unlock all features and exam
                       questions.
                     </p>
                     <button
@@ -434,37 +491,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* User Info Card */}
-          <div className={styles.welcomeCard}>
-            <div className={styles.userInfo}>
-              <div className={styles.avatar}>
-                {user?.displayName?.[0]?.toUpperCase() ||
-                  user?.email?.[0]?.toUpperCase() ||
-                  "U"}
-              </div>
-              <div className={styles.userDetails}>
-                <h2 className={styles.userName}>
-                  {user?.displayName || "Nigerian Nursing Student"}
-                </h2>
-                <p className={styles.userEmail}>{user?.email}</p>
-                <div className={styles.verificationStatus}>
-                  <span
-                    className={`${styles.status} ${
-                      user?.emailVerified ? styles.verified : styles.unverified
-                    }`}
-                  >
-                    {user?.emailVerified
-                      ? "✅ Email Verified"
-                      : "❌ Email Not Verified"}
-                  </span>
-                  <span className={styles.loginCount}>
-                    Logins: {userData?.loginCount || 1}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Features Grid */}
           {userData?.isActive ? (
             <div className={styles.featuresGrid}>
@@ -472,13 +498,12 @@ const Dashboard: React.FC = () => {
                 <div className={styles.featureIcon}>🧪</div>
                 <h4 className={styles.featureTitle}>Practice Tests</h4>
                 <p className={styles.featureText}>
-                  Access 10,000+ nursing exam questions with timed tests.
+                  Access 10,000+ nursing exam questions with timed tests and
+                  real exam simulation.
                 </p>
                 <button
                   className={styles.featureButton}
-                  onClick={() =>
-                    toast.info("Practice tests feature coming soon!")
-                  }
+                  onClick={handlePracticeTests}
                 >
                   Start Practice Test
                 </button>
@@ -488,13 +513,15 @@ const Dashboard: React.FC = () => {
                 <div className={styles.featureIcon}>📊</div>
                 <h4 className={styles.featureTitle}>Progress Analytics</h4>
                 <p className={styles.featureText}>
-                  Track your performance and identify weak areas.
+                  Track your performance, identify weak areas, and monitor your
+                  improvement.
                 </p>
                 <button
-                  className={styles.featureButton}
-                  onClick={() => toast.info("Progress analytics coming soon!")}
+                  disabled
+                  className={`${styles.featureButton} ${styles.disabledButton}`}
                 >
                   View Progress
+                  <span className={styles.comingSoonBadge}>Coming Soon</span>
                 </button>
               </div>
 
@@ -502,43 +529,34 @@ const Dashboard: React.FC = () => {
                 <div className={styles.featureIcon}>📖</div>
                 <h4 className={styles.featureTitle}>Study Materials</h4>
                 <p className={styles.featureText}>
-                  Comprehensive nursing study guides and resources.
+                  Comprehensive nursing study guides, resources, and reference
+                  materials.
                 </p>
                 <button
-                  className={styles.featureButton}
-                  onClick={() => toast.info("Study materials coming soon!")}
+                  disabled
+                  className={`${styles.featureButton} ${styles.disabledButton}`}
                 >
                   Browse Materials
+                  <span className={styles.comingSoonBadge}>Coming Soon</span>
                 </button>
               </div>
             </div>
           ) : (
             <div className={styles.lockedFeatures}>
               <div className={styles.lockedIcon}>🔒</div>
-              <h3 className={styles.lockedTitle}>Features Locked</h3>
+              <h3 className={styles.lockedTitle}>Premium Features Locked</h3>
               <p className={styles.lockedText}>
-                Activate your account to unlock all features including practice
-                tests, progress analytics, and study materials.
+                Activate your account to unlock practice tests, progress
+                analytics, study materials, and more advanced features.
               </p>
               <button
                 className={styles.unlockButton}
                 onClick={() => setShowPaymentModal(true)}
               >
-                Unlock Features - ₦4,000
+                Unlock All Features - ₦4,000
               </button>
             </div>
           )}
-
-          {/* Logout Section */}
-          <div className={styles.logoutSection}>
-            <button className={styles.logoutButton} onClick={handleLogout}>
-              <span className={styles.logoutIcon}>🚪</span>
-              Logout
-            </button>
-            <p className={styles.logoutNote}>
-              Click here to securely log out of your account
-            </p>
-          </div>
         </div>
       </div>
     </div>

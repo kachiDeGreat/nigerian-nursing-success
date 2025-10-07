@@ -1,5 +1,6 @@
 // src/pages/AuthPage.tsx
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SignUp from "./SignUp";
 import Login from "./Login";
 import styles from "../styles/Form.module.css";
@@ -8,9 +9,9 @@ import "react-toastify/dist/ReactToastify.css";
 const AuthPage = () => {
   const [isLoginView, setIsLoginView] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Animation on component mount
     setIsVisible(true);
   }, []);
 
@@ -24,23 +25,23 @@ const AuthPage = () => {
 
   return (
     <div className={styles.authPage}>
-     
+      <button
+        className={styles.backButton}
+        onClick={() => navigate("/")}
+        aria-label="Back to Home"
+      >
+        ← Back to Home
+      </button>
 
       <div
         className={`${styles.authBackground} ${
           isVisible ? styles.visible : ""
         }`}
       >
-        <div className={styles.floatingShapes}>
-          <div className={styles.shape}></div>
-          <div className={styles.shape}></div>
-          <div className={styles.shape}></div>
-        </div>
-
         <div
-          className={`${styles.authContainer} ${
-            isVisible ? styles.visible : ""
-          }`}
+          className={
+            styles.authContainer + " " + (isVisible ? styles.visible : "")
+          }
         >
           <div className={styles.logoContainer}>
             <h1 className={styles.appTitle}>Nigerian Nursing Success</h1>

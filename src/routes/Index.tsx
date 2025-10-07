@@ -8,6 +8,8 @@ import ActionHandler from "../pages/ActionHandler";
 import ScrollToTop from "../components/ScrollToTop";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "../pages/Dashboard";
+import QuestionUpload from "../components/QuestionUpload";
+import QuizApp from "../components/QuizApp";
 
 function Index() {
   return (
@@ -20,7 +22,8 @@ function Index() {
         <Route path="/verify-success" element={<VerifySuccess />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/action" element={<ActionHandler />} />
-
+        <Route path="/admin/upload-questions" element={<QuestionUpload />} />
+        <Route path="/quiz" element={<QuizApp />} />
         {/* Protected Routes - Only accessible when logged in */}
         <Route
           path="/dashboard"
