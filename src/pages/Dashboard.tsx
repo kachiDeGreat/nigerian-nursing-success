@@ -253,17 +253,17 @@ const Dashboard: React.FC = () => {
     return null;
   }
 
-  // function handlePracticeTests(
-  //   event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  // ): void {
-  //   event.preventDefault();
-  //   if (!userData?.isActive) {
-  //     toast.info("Please activate your account to access practice tests.");
-  //     setShowPaymentModal(true);
-  //     return;
-  //   }
-  //   navigate("/quiz");
-  // }
+  function handlePracticeTests(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.preventDefault();
+    if (!userData?.isActive) {
+      toast.info("Please activate your account to access practice tests.");
+      setShowPaymentModal(true);
+      return;
+    }
+    navigate("/quiz");
+  }
 
   return (
     <div className={styles.dashboard}>
@@ -502,13 +502,13 @@ const Dashboard: React.FC = () => {
                   real exam simulation.
                 </p>
                 <button
-                  // className={styles.featureButton}
-                  // onClick={handlePracticeTests}
-                  disabled
-                  className={`${styles.featureButton} ${styles.disabledButton}`}
+                  className={styles.featureButton}
+                  onClick={handlePracticeTests}
+                  // disabled
+                  // className={`${styles.featureButton} ${styles.disabledButton}`}
                 >
                   Start Practice Test
-                  <span className={styles.comingSoonBadge}>Quiz App Launches Tomorrow</span>
+                  {/* <span className={styles.comingSoonBadge}>Coming Soon</span> */}
                 </button>
               </div>
 

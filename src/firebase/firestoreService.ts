@@ -855,3 +855,4 @@ export const searchQuizQuestions = async (
 
   return filteredQuestions.slice(0, limitCount);
 };
+ 
