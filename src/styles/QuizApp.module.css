@@ -221,7 +221,7 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 100%;
-  max-width: 700px;
+  max-width: 700px; 
 }
 
 .quizHeader {
@@ -676,6 +676,113 @@
   }
 
   .resultActions {
+    padding: 1rem;
+  }
+}
+
+/* Add these styles to your existing CSS file */
+
+/* Review Mode Styles */
+.correctAnswer {
+  border-color: #38a169 !important;
+  background: #f0fff4 !important;
+  position: relative;
+}
+
+.incorrectAnswer {
+  border-color: #e53e3e !important;
+  background: #fed7d7 !important;
+  position: relative;
+}
+
+.userAnswer {
+  border-color: #4299e1 !important;
+  background: #ebf8ff !important;
+}
+
+.correctBadge {
+  background: #38a169;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.incorrectBadge {
+  background: #e53e3e;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.explanationSection {
+  background: #f7fafc;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border-left: 4px solid #4299e1;
+  margin-top: 1.5rem;
+}
+
+.explanationSection h4 {
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.explanationSection p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.reviewSection {
+  background: #fffaf0;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border-left: 4px solid #dd6b20;
+  margin-bottom: 1.5rem;
+}
+
+.reviewSection h4 {
+  color: #2d3748;
+  margin-bottom: 0.75rem;
+}
+
+.reviewSection p {
+  color: #744210;
+  margin-bottom: 1rem;
+}
+
+.reviewBtn {
+  background: #dd6b20;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reviewBtn:hover {
+  background: #c05621;
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments for review mode */
+@media (max-width: 768px) {
+  .correctBadge,
+  .incorrectBadge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .explanationSection {
     padding: 1rem;
   }
 }

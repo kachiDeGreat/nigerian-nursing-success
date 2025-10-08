@@ -26,6 +26,7 @@ const QuizApp: React.FC = () => {
   const [quizSessionId, setQuizSessionId] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [isPaidUser, setIsPaidUser] = useState<boolean | null>(null);
+  const [showReview, setShowReview] = useState(false); // New state for review mode
 
   const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
@@ -258,12 +259,21 @@ const QuizApp: React.FC = () => {
     setScore(0);
     setQuizSessionId(null);
     setTimeRemaining(1800);
+    setShowReview(false);
   };
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  // Helper function to check if user got a question wrong
+  const isQuestionIncorrect = (questionId: string) => {
+    return (
+      selectedAnswers[questionId] !==
+      questions.find((q) => q.id === questionId)?.correctAnswer
+    );
   };
 
   // Show loading while checking user status
@@ -411,6 +421,132 @@ const QuizApp: React.FC = () => {
     );
   }
 
+  if (quizCompleted && showReview) {
+    const correctAnswers = questions.filter(
+      (q) => selectedAnswers[q.id!] === q.correctAnswer
+    ).length;
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.centerContent}>
+          <div className={styles.quizCard}>
+            {/* Quiz Header */}
+            <div className={styles.quizHeader}>
+              <div className={styles.progressSection}>
+                <div className={styles.progressText}>
+                  Review Mode - Question {currentQuestionIndex + 1} of{" "}
+                  {questions.length}
+                </div>
+                <div className={styles.progressBar}>
+                  <div
+                    className={styles.progressFill}
+                    style={{
+                      width: `${
+                        ((currentQuestionIndex + 1) / questions.length) * 100
+                      }%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className={styles.quizStats}>
+                <div className={styles.stat}>
+                  <span className={styles.statIcon}>📊</span>
+                  <span className={styles.statValue}>Score: {score}%</span>
+                </div>
+                <div className={styles.stat}>
+                  <span className={styles.statIcon}>✅</span>
+                  <span className={styles.statValue}>
+                    {correctAnswers}/{questions.length}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Question Card */}
+            <div className={styles.questionSection}>
+              <h3 className={styles.questionText}>
+                {currentQuestion?.question}
+              </h3>
+
+              <div className={styles.optionsGrid}>
+                {currentQuestion?.options.map((option, index) => {
+                  const isCorrectAnswer =
+                    option === currentQuestion.correctAnswer;
+                  const isUserAnswer =
+                    selectedAnswers[currentQuestion.id!] === option;
+                  const isIncorrect = isUserAnswer && !isCorrectAnswer;
+
+                  let optionStyle = styles.optionBtn;
+                  if (isCorrectAnswer) {
+                    optionStyle = `${styles.optionBtn} ${styles.correctAnswer}`;
+                  } else if (isIncorrect) {
+                    optionStyle = `${styles.optionBtn} ${styles.incorrectAnswer}`;
+                  } else if (isUserAnswer) {
+                    optionStyle = `${styles.optionBtn} ${styles.userAnswer}`;
+                  }
+
+                  return (
+                    <button
+                      key={index}
+                      className={optionStyle}
+                      disabled // Disable interaction in review mode
+                    >
+                      <span className={styles.optionLetter}>
+                        {String.fromCharCode(65 + index)}
+                      </span>
+                      <span className={styles.optionText}>{option}</span>
+                      {isCorrectAnswer && (
+                        <span className={styles.correctBadge}>✓ Correct</span>
+                      )}
+                      {isIncorrect && (
+                        <span className={styles.incorrectBadge}>
+                          ✗ Your Answer
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Explanation Section */}
+              {currentQuestion?.explanation && (
+                <div className={styles.explanationSection}>
+                  <h4>Explanation:</h4>
+                  <p>{currentQuestion.explanation}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Navigation */}
+            <div className={styles.navigationSection}>
+              <button
+                onClick={prevQuestion}
+                disabled={currentQuestionIndex === 0}
+                className={styles.navBtn}
+              >
+                Previous
+              </button>
+
+              {currentQuestionIndex === questions.length - 1 ? (
+                <button
+                  onClick={() => setShowReview(false)}
+                  className={styles.submitBtn}
+                >
+                  Back to Results
+                </button>
+              ) : (
+                <button onClick={nextQuestion} className={styles.navBtn}>
+                  Next
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (quizCompleted) {
     const correctAnswers = questions.filter(
       (q) => selectedAnswers[q.id!] === q.correctAnswer
@@ -420,6 +556,10 @@ const QuizApp: React.FC = () => {
       score,
       correctAnswers,
       questions.length
+    );
+
+    const incorrectQuestions = questions.filter((q) =>
+      isQuestionIncorrect(q.id!)
     );
 
     return (
@@ -455,11 +595,19 @@ const QuizApp: React.FC = () => {
                     {Math.round((correctAnswers / questions.length) * 100)}%
                   </span>
                 </div>
+                <div className={styles.detailItem}>
+                  <span className={styles.detailLabel}>
+                    Questions to Review:
+                  </span>
+                  <span className={styles.detailValue}>
+                    {incorrectQuestions.length}
+                  </span>
+                </div>
               </div>
             </div>
 
             <div className={styles.analysisSection}>
-              <h3>Performance Insights</h3>
+              {/* <h3>Performance Insights</h3>
 
               <div className={styles.performanceGrid}>
                 <div className={styles.performanceMetric}>
@@ -476,7 +624,7 @@ const QuizApp: React.FC = () => {
                   </div>
                   <div className={styles.metricLabel}>Time Used</div>
                 </div>
-              </div>
+              </div> */}
 
               <div className={styles.suggestionsBox}>
                 <h4>Personalized Suggestions</h4>
@@ -488,6 +636,30 @@ const QuizApp: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Review Section */}
+              {incorrectQuestions.length > 0 && (
+                <div className={styles.reviewSection}>
+                  <h4>Review Incorrect Answers</h4>
+                  <p>
+                    You missed {incorrectQuestions.length} question(s). Review
+                    them to improve your understanding.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setShowReview(true);
+                      // Find first incorrect question
+                      const firstIncorrectIndex = questions.findIndex((q) =>
+                        isQuestionIncorrect(q.id!)
+                      );
+                      setCurrentQuestionIndex(firstIncorrectIndex);
+                    }}
+                    className={styles.reviewBtn}
+                  >
+                    Review Incorrect Answers
+                  </button>
+                </div>
+              )}
 
               {/* <div className={styles.studyPlan}>
                 <h4>Recommended Study Plan</h4>
