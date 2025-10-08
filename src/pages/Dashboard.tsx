@@ -251,7 +251,7 @@ const Dashboard: React.FC = () => {
 
   if (!user) {
     return null;
-  } 
+  }
 
   function handlePracticeTests(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -332,7 +332,7 @@ const Dashboard: React.FC = () => {
                     <span className={styles.featureIcon}>✓</span>
                     Detailed performance analytics
                   </li>
-                  <li className={styles.featureItem}> 
+                  <li className={styles.featureItem}>
                     <span className={styles.featureIcon}>✓</span>
                     Mobile-friendly platform
                   </li>
@@ -381,7 +381,7 @@ const Dashboard: React.FC = () => {
       {showPaystackInline && user?.email && (
         <PaystackInlinePayment
           email={user.email}
-          amount={4000}
+          amount={10}
           publicKey={import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}
           onSuccess={handlePaymentSuccess}
           onClose={() => setShowPaystackInline(false)}
