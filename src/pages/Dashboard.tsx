@@ -381,7 +381,7 @@ const Dashboard: React.FC = () => {
       {showPaystackInline && user?.email && (
         <PaystackInlinePayment
           email={user.email}
-          amount={10}
+          amount={4000}
           publicKey={import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}
           onSuccess={handlePaymentSuccess}
           onClose={() => setShowPaystackInline(false)}
