@@ -251,7 +251,7 @@ const Dashboard: React.FC = () => {
 
   if (!user) {
     return null;
-  }
+  } 
 
   function handlePracticeTests(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

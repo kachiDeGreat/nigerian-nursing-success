@@ -148,7 +148,7 @@ const Footer: React.FC = () => {
           </div> */}
 
           {/* Newsletter */}
-          <div className={styles.newsletter}>
+          {/* <div className={styles.newsletter}>
             <div className={styles.newsletterContent}>
               <h4 className={styles.newsletterTitle}>Stay Updated</h4>
               <p className={styles.newsletterText}>
@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
               />
               <button className={styles.newsletterButton}>Subscribe</button>
             </div>
-          </div>
+          </div> */}
 
           {/* Bottom Footer */}
           <div className={styles.footerBottom}>

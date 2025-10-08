@@ -10,9 +10,9 @@ const CTASection: React.FC = () => {
     console.log("Get Started clicked");
   };
 
-  const handleContactSales = () => {
-    window.open("https://wa.me/2348100790074", "_blank");
-  };
+  // const handleContactSales = () => {
+  //   window.open("https://wa.me/2348100790074", "_blank");
+  // };
 
   return (
     <section id="cta" className={styles.cta}>
@@ -80,12 +80,12 @@ const CTASection: React.FC = () => {
               <span className={styles.buttonText}>Start Now - ₦4,000</span>
               <span className={styles.buttonArrow}>→</span>
             </button>
-            <button
+            {/* <button
               className={styles.secondaryButton}
               onClick={handleContactSales}
             >
               <span className={styles.buttonText}>Contact Sales</span>
-            </button>
+            </button> */}
           </div>
 
           {/* Guarantee Section */}
