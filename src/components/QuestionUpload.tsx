@@ -40,17 +40,29 @@ const QuestionUpload: React.FC = () => {
     const lines = text.split("\n").filter((line) => line.trim());
     const questions: QuizQuestion[] = [];
     let currentQuestion: QuizQuestion | null = null;
+    let currentQuestionText = "";
 
     for (const line of lines) {
       const trimmedLine = line.trim();
 
-      // Check if line starts with a number (new question)
-      if (/^\d+\./.test(trimmedLine)) {
+      // Check if line starts with a number (new question) OR is a question line without number
+      if (
+        /^\d+\./.test(trimmedLine) ||
+        (trimmedLine.length > 10 &&
+          /^[A-Za-z]/.test(trimmedLine) &&
+          !/^[A-D]\./.test(trimmedLine) &&
+          currentQuestion === null)
+      ) {
         if (currentQuestion) {
+          // Save the previous question if it exists
+          currentQuestion.question = currentQuestionText.trim();
           questions.push(currentQuestion);
         }
+
+        // Start a new question
+        currentQuestionText = trimmedLine.replace(/^\d+\.\s*/, "");
         currentQuestion = {
-          question: trimmedLine.replace(/^\d+\.\s*/, ""),
+          question: "",
           options: [],
           correctAnswer: "",
           category: "General Nursing",
@@ -63,36 +75,87 @@ const QuestionUpload: React.FC = () => {
         if (currentQuestion) {
           const optionText = trimmedLine.replace(/^[A-D]\.\s*/, "");
 
-          // Check if this option contains "(correct answer)"
-          if (optionText.includes("(correct answer)")) {
-            const cleanOption = optionText
-              .replace("(correct answer)", "")
-              .trim();
-            currentQuestion.options.push(cleanOption);
+          // More flexible check for correct answer markers
+          const correctAnswerPatterns = [
+            /\(correct answer\)/i,
+            /\(correct\)/i,
+            /\[correct\]/i,
+            /\*correct\*/i,
+          ];
+
+          let isCorrect = false;
+          let cleanOption = optionText;
+
+          for (const pattern of correctAnswerPatterns) {
+            if (pattern.test(optionText)) {
+              cleanOption = optionText.replace(pattern, "").trim();
+              isCorrect = true;
+              break;
+            }
+          }
+
+          currentQuestion.options.push(cleanOption);
+
+          if (isCorrect) {
             currentQuestion.correctAnswer = cleanOption;
-          } else {
-            currentQuestion.options.push(optionText);
           }
         }
       }
-      // If line doesn't match patterns, add to current question
-      else if (currentQuestion && trimmedLine) {
-        currentQuestion.question += " " + trimmedLine;
+      // If line is empty, it might separate questions
+      else if (trimmedLine === "" && currentQuestion && currentQuestionText) {
+        // Finish current question
+        currentQuestion.question = currentQuestionText.trim();
+        questions.push(currentQuestion);
+        currentQuestion = null;
+        currentQuestionText = "";
+      }
+      // If line doesn't match patterns and we have a current question, add to question text
+      else if (
+        currentQuestion &&
+        trimmedLine &&
+        !/^[A-D]\./.test(trimmedLine)
+      ) {
+        currentQuestionText += " " + trimmedLine;
       }
     }
 
-    // Add the last question
-    if (currentQuestion) {
+    // Add the last question if it exists
+    if (currentQuestion && currentQuestionText) {
+      currentQuestion.question = currentQuestionText.trim();
       questions.push(currentQuestion);
     }
 
-    return questions.filter(
-      (q) =>
+    // Filter only valid questions and debug any issues
+    const validQuestions = questions.filter((q) => {
+      const isValid =
         q.question &&
+        q.question.length > 0 &&
         q.options.length >= 2 &&
         q.correctAnswer &&
-        q.options.includes(q.correctAnswer)
+        q.correctAnswer.length > 0 &&
+        q.options.includes(q.correctAnswer);
+
+      if (!isValid) {
+        console.log("Invalid question:", q);
+        console.log("Has question:", !!q.question);
+        console.log("Question length:", q.question.length);
+        console.log("Options count:", q.options.length);
+        console.log("Has correct answer:", !!q.correctAnswer);
+        console.log("Correct answer length:", q.correctAnswer.length);
+        console.log(
+          "Correct answer in options:",
+          q.options.includes(q.correctAnswer)
+        );
+      }
+
+      return isValid;
+    });
+
+    console.log(
+      `Parsed ${validQuestions.length} valid questions out of ${questions.length} total`
     );
+    console.log("All parsed questions:", questions);
+    return validQuestions;
   };
 
   const handleUpload = async () => {
@@ -107,13 +170,23 @@ const QuestionUpload: React.FC = () => {
     try {
       const parsedQuestions = parseQuestions(questionsText);
 
+      // Debug: Show what was parsed
+      console.log("Raw parsed questions:", parsedQuestions);
+
       if (parsedQuestions.length === 0) {
-        toast.error("No valid questions found. Please check your format.");
+        // Show more detailed error message
+        const debugText = `No valid questions found. 
+First few lines of input: ${questionsText.split("\n").slice(0, 10).join(" | ")}
+Total lines: ${questionsText.split("\n").length}`;
+
+        toast.error("No valid questions found. Check console for details.");
+        console.error("Parsing debug:", debugText);
+        console.error("Full input text:", questionsText);
         setIsUploading(false);
         return;
       }
 
-      console.log("Parsed questions:", parsedQuestions);
+      console.log("Final parsed questions:", parsedQuestions);
 
       const questionIds = await addBulkQuizQuestions(parsedQuestions);
 
@@ -223,20 +296,26 @@ const QuestionUpload: React.FC = () => {
         <h2>Upload Questions</h2>
         <div className={styles.instructions}>
           <h3>Format Instructions:</h3>
-          <p>Paste questions in this format:</p>
+          <p>Paste questions in this format (with or without numbers):</p>
           <div className={styles.example}>
-            <pre>{`1. A patient presents with high fever and neck stiffness. What is the most likely diagnosis?
+            <pre>{`What is a priority nursing intervention for clients with pulmonary embolism? 
+A. Encourage ambulation 
+B. Administer oxygen and anticoagulants as prescribed (correct answer) 
+C. Promote fluid overload 
+D. Ignore respiratory status
+
+OR
+
+1. A patient presents with high fever and neck stiffness. What is the most likely diagnosis?
 A. Malaria
 B. Meningitis (correct answer)
 C. Typhoid
-D. Pneumonia
-
-2. Which vitamin is essential for blood clotting?
-A. Vitamin A
-B. Vitamin B12
-C. Vitamin C
-D. Vitamin K (correct answer)`}</pre>
+D. Pneumonia`}</pre>
           </div>
+          <p>
+            <strong>Note:</strong> The correct answer should be marked with
+            "(correct answer)" after the option text.
+          </p>
         </div>
 
         <textarea
