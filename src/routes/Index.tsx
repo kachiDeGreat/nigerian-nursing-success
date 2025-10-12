@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "../pages/Dashboard";
 import QuestionUpload from "../components/QuestionUpload";
 import QuizApp from "../components/QuizApp";
+import UserList from "../pages/UserList";
 
 function Index() {
   return (
@@ -22,6 +23,7 @@ function Index() {
         <Route path="/verify-success" element={<VerifySuccess />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/action" element={<ActionHandler />} />
+        <Route path="/userlist" element={<UserList />} />
         <Route path="/admin/upload-questions" element={<QuestionUpload />} />
         {/* <Route path="/quiz" element={<QuizApp />} /> */}
         {/* Protected Routes - Only accessible when logged in */}

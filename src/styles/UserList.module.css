@@ -1,0 +1,338 @@
+/* src/styles/UserList.module.css */
+.container {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.passwordSection {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.passwordSection h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 24px;
+}
+
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.passwordInput {
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.passwordInput:focus {
+  outline: none;
+  /* border-color: #667eea; */
+}
+
+.submitButton {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.userListSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f2f5;
+}
+
+.header h2 {
+  color: #333;
+  margin: 0;
+  font-size: 28px;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.refreshButton,
+.exportButton,
+.copyButton,
+.backButton {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refreshButton {
+  background: #10b981;
+  color: white;
+}
+
+.refreshButton:hover:not(:disabled) {
+  background: #059669;
+}
+
+.exportButton {
+  background: #3b82f6;
+  color: white;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.copyButton {
+  background: #8b5cf6;
+  color: white;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: #7c3aed;
+}
+
+.backButton {
+  background: #6b7280;
+  color: white;
+}
+
+.backButton:hover {
+  background: #4b5563;
+}
+
+.refreshButton:disabled,
+.exportButton:disabled,
+.copyButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.searchSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  max-width: 400px;
+  padding: 10px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.userCount {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #6b7280;
+  font-size: 18px;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e1e5e9;
+}
+
+.userTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.userTable th {
+  background: #f8fafc;
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e1e5e9;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.userTable td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #4b5563;
+}
+
+.userTable tr:hover {
+  background: #f8fafc;
+}
+
+.emailCell {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.dateCell {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.statusBadge,
+.paymentBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusBadge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusBadge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.paymentBadge.paid {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.paymentBadge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.paymentBadge.failed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.paymentBadge.unknown {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.summary {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f2f5;
+  flex-wrap: wrap;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
+.summaryLabel {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.summaryValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .userListSection {
+    padding: 20px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .controls {
+    justify-content: center;
+  }
+
+  .searchSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchInput {
+    max-width: none;
+  }
+
+  .summary {
+    justify-content: center;
+  }
+
+  .userTable th,
+  .userTable td {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+}
