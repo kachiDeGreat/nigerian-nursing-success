@@ -112,13 +112,14 @@ const QuestionUpload: React.FC = () => {
       questions.push(currentQuestion);
     }
 
-    return questions.filter((q) => 
-      q.question &&
-      q.question.length > 0 &&
-      q.options.length >= 2 &&
-      q.correctAnswer &&
-      q.correctAnswer.length > 0 &&
-      q.options.includes(q.correctAnswer)
+    return questions.filter(
+      (q) =>
+        q.question &&
+        q.question.length > 0 &&
+        q.options.length >= 2 &&
+        q.correctAnswer &&
+        q.correctAnswer.length > 0 &&
+        q.options.includes(q.correctAnswer)
     );
   };
 
@@ -140,7 +141,7 @@ const QuestionUpload: React.FC = () => {
       }
 
       const questionIds = await addBulkQuizQuestions(parsedQuestions);
-      
+
       setUploadResult({
         success: questionIds.length,
         failed: parsedQuestions.length - questionIds.length,
@@ -152,11 +153,16 @@ const QuestionUpload: React.FC = () => {
       }
 
       if (parsedQuestions.length - questionIds.length > 0) {
-        toast.warning(`${parsedQuestions.length - questionIds.length} questions failed to upload`);
+        toast.warning(
+          `${
+            parsedQuestions.length - questionIds.length
+          } questions failed to upload`
+        );
       }
     } catch (error: unknown) {
       console.error("Upload error:", error);
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       toast.error(`Upload failed: ${errorMessage}`);
     } finally {
       setIsUploading(false);
@@ -180,7 +186,7 @@ const QuestionUpload: React.FC = () => {
             <h1>Question Upload</h1>
             <p className={styles.subtitle}>Admin Portal</p>
           </div>
-          
+
           <form onSubmit={handlePasswordSubmit} className={styles.authForm}>
             <div className={styles.inputGroup}>
               <label htmlFor="password" className={styles.label}>
@@ -196,26 +202,48 @@ const QuestionUpload: React.FC = () => {
                 required
               />
             </div>
-            
+
             <button type="submit" className={styles.authButton}>
               <span>Access Portal</span>
               <span className={styles.buttonIcon}>→</span>
             </button>
           </form>
-          
+
           <div className={styles.authFooter}>
             <p>Secure admin access only</p>
           </div>
         </div>
-        <ToastContainer position="top-right" theme="colored" />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </div>
     );
   }
 
   return (
     <div className={styles.dashboard}>
-      <ToastContainer position="top-right" theme="colored" />
-      
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerInfo}>
@@ -241,26 +269,32 @@ const QuestionUpload: React.FC = () => {
           <div className={styles.statCard}>
             <div className={styles.statIcon}>📝</div>
             <div className={styles.statInfo}>
-              <span className={styles.statNumber}>{parsedQuestions.length}</span>
+              <span className={styles.statNumber}>
+                {parsedQuestions.length}
+              </span>
               <span className={styles.statLabel}>Questions Ready</span>
             </div>
           </div>
-          
+
           {uploadResult && (
             <>
               <div className={`${styles.statCard} ${styles.success}`}>
                 <div className={styles.statIcon}>✅</div>
                 <div className={styles.statInfo}>
-                  <span className={styles.statNumber}>{uploadResult.success}</span>
+                  <span className={styles.statNumber}>
+                    {uploadResult.success}
+                  </span>
                   <span className={styles.statLabel}>Uploaded</span>
                 </div>
               </div>
-              
+
               {uploadResult.failed > 0 && (
                 <div className={`${styles.statCard} ${styles.error}`}>
                   <div className={styles.statIcon}>❌</div>
                   <div className={styles.statInfo}>
-                    <span className={styles.statNumber}>{uploadResult.failed}</span>
+                    <span className={styles.statNumber}>
+                      {uploadResult.failed}
+                    </span>
                     <span className={styles.statLabel}>Failed</span>
                   </div>
                 </div>
@@ -272,14 +306,18 @@ const QuestionUpload: React.FC = () => {
         <div className={styles.contentCard}>
           <div className={styles.tabNavigation}>
             <button
-              className={`${styles.tab} ${activeTab === "upload" ? styles.active : ""}`}
+              className={`${styles.tab} ${
+                activeTab === "upload" ? styles.active : ""
+              }`}
               onClick={() => setActiveTab("upload")}
             >
               <span className={styles.tabIcon}>📤</span>
               Upload Questions
             </button>
             <button
-              className={`${styles.tab} ${activeTab === "preview" ? styles.active : ""}`}
+              className={`${styles.tab} ${
+                activeTab === "preview" ? styles.active : ""
+              }`}
               onClick={() => setActiveTab("preview")}
             >
               <span className={styles.tabIcon}>👁️</span>
@@ -302,7 +340,7 @@ const QuestionUpload: React.FC = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <textarea
                   value={questionsText}
                   onChange={(e) => setQuestionsText(e.target.value)}
@@ -317,7 +355,7 @@ D. Ignore respiratory status`}
                   className={styles.textarea}
                   rows={15}
                 />
-                
+
                 <div className={styles.textareaFooter}>
                   <span className={styles.charCount}>
                     {questionsText.length} characters
@@ -331,7 +369,11 @@ D. Ignore respiratory status`}
               <div className={styles.actionBar}>
                 <button
                   onClick={handleUpload}
-                  disabled={isUploading || !questionsText.trim() || parsedQuestions.length === 0}
+                  disabled={
+                    isUploading ||
+                    !questionsText.trim() ||
+                    parsedQuestions.length === 0
+                  }
                   className={styles.uploadButton}
                 >
                   {isUploading ? (
@@ -363,7 +405,9 @@ D. Ignore respiratory status`}
                   {parsedQuestions.map((question, index) => (
                     <div key={index} className={styles.questionCard}>
                       <div className={styles.questionHeader}>
-                        <span className={styles.questionNumber}>Q{index + 1}</span>
+                        <span className={styles.questionNumber}>
+                          Q{index + 1}
+                        </span>
                         <span className={styles.questionCategory}>
                           {question.category}
                         </span>
@@ -374,7 +418,9 @@ D. Ignore respiratory status`}
                           <div
                             key={optIndex}
                             className={`${styles.option} ${
-                              option === question.correctAnswer ? styles.correct : ""
+                              option === question.correctAnswer
+                                ? styles.correct
+                                : ""
                             }`}
                           >
                             <span className={styles.optionLabel}>
@@ -382,7 +428,9 @@ D. Ignore respiratory status`}
                             </span>
                             <span className={styles.optionText}>{option}</span>
                             {option === question.correctAnswer && (
-                              <span className={styles.correctBadge}>Correct</span>
+                              <span className={styles.correctBadge}>
+                                Correct
+                              </span>
                             )}
                           </div>
                         ))}
