@@ -11,6 +11,7 @@ import Dashboard from "../pages/Dashboard";
 import QuestionUpload from "../components/QuestionUpload";
 import QuizApp from "../components/QuizApp";
 import UserList from "../pages/UserList";
+import QuestionManager from "../components/QuestionManager";
 
 function Index() {
   return (
@@ -23,8 +24,9 @@ function Index() {
         <Route path="/verify-success" element={<VerifySuccess />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/action" element={<ActionHandler />} />
-        <Route path="/userlist" element={<UserList />} />
+        {/* <Route path="/userlist" element={<UserList />} />
         <Route path="/admin/upload-questions" element={<QuestionUpload />} />
+        <Route path="/admin/manage-questions" element={<QuestionManager />} /> */}
         {/* <Route path="/quiz" element={<QuizApp />} /> */}
         {/* Protected Routes - Only accessible when logged in */}
         <Route
@@ -43,22 +45,30 @@ function Index() {
             </ProtectedRoute>
           }
         />
-        {/* <Route
-          path="/profile"
+        <Route
+          path="/userlist"
           element={
             <ProtectedRoute>
-              <div>Profile Page - Protected Content</div>
+              <UserList />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/study"
+          path="/admin/upload-questions"
           element={
             <ProtectedRoute>
-              <div>Study Page - Protected Content</div>
+              <QuestionUpload />
             </ProtectedRoute>
           }
-        /> */}
+        />{" "}
+        <Route
+          path="/admin/manage-questions"
+          element={
+            <ProtectedRoute>
+              <QuestionManager />
+            </ProtectedRoute>
+          }
+        />
         {/* Add more protected routes as needed */}
       </Routes>
     </>
