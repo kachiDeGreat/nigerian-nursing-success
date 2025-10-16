@@ -11,6 +11,7 @@ import { db } from "../firebase/firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/UserList.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   uid: string;
@@ -26,6 +27,8 @@ const UserList: React.FC = () => {
   const [showList, setShowList] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
 
   const ADMIN_PASSWORD = "123456789012345";
@@ -184,6 +187,13 @@ const UserList: React.FC = () => {
       />
 
       <div className={styles.userListSection}>
+        <button
+          className={styles.backButton}
+          onClick={() => navigate("/dashboard")}
+          aria-label="Back to dashboard"
+        >
+          ← Back to Dashboard
+        </button>
         <div className={styles.header}>
           <h2>User List</h2>
           <div className={styles.controls}>
@@ -208,7 +218,7 @@ const UserList: React.FC = () => {
             >
               Copy Emails
             </button>
-            <button
+            {/* <button
               onClick={() => {
                 setShowList(false);
                 setPassword("");
@@ -217,7 +227,7 @@ const UserList: React.FC = () => {
               className={styles.backButton}
             >
               Back to Login
-            </button>
+            </button> */}
           </div>
         </div>
 

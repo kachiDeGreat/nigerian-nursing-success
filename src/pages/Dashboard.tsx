@@ -107,6 +107,49 @@ const PaystackInlinePayment: React.FC<{
   );
 };
 
+// Admin Dropdown Component
+const AdminDropdown: React.FC<{
+  showDropdown: boolean;
+  onToggle: () => void;
+  onNavigate: (path: string) => void;
+}> = ({ showDropdown, onToggle, onNavigate }) => {
+  return (
+    <div className={styles.adminDropdown}>
+      <button className={styles.adminToggle} onClick={onToggle}>
+        <span className={styles.adminIcon}>⚙️</span>
+        <span className={styles.adminText}>Admin</span>
+        <span className={styles.dropdownArrow}>{showDropdown ? "▲" : "▼"}</span>
+      </button>
+
+      {showDropdown && (
+        <div className={styles.dropdownMenu}>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => onNavigate("/userlist")}
+          >
+            <span className={styles.dropdownIcon}>👥</span>
+            User List
+          </button>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => onNavigate("/admin/manage-questions")}
+          >
+            <span className={styles.dropdownIcon}>📋</span>
+            Manage Questions
+          </button>
+          <button
+            className={styles.dropdownItem}
+            onClick={() => onNavigate("/admin/upload-questions")}
+          >
+            <span className={styles.dropdownIcon}>📤</span>
+            Upload Questions
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
@@ -115,6 +158,12 @@ const Dashboard: React.FC = () => {
   const [showPaystackInline, setShowPaystackInline] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [showAdminDropdown, setShowAdminDropdown] = useState(false);
+
+  // Check if user is admin
+  const isAdminUser =
+    user?.email === "mail.ricx@gmail.com" ||
+    user?.email === "ndukacn@outlook.com";
 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged(async (currentUser) => {
@@ -240,6 +289,11 @@ const Dashboard: React.FC = () => {
     return user?.email?.[0]?.toUpperCase() || "U";
   };
 
+  const handleAdminNavigate = (path: string) => {
+    setShowAdminDropdown(false);
+    navigate(path);
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -277,6 +331,14 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className={styles.navUser}>
+          {isAdminUser && (
+            <AdminDropdown
+              showDropdown={showAdminDropdown}
+              onToggle={() => setShowAdminDropdown(!showAdminDropdown)}
+              onNavigate={handleAdminNavigate}
+            />
+          )}
+
           <div className={styles.userProfile}>
             <div className={styles.avatar}>{getUserInitials()}</div>
             <div className={styles.userInfo}>
@@ -286,6 +348,7 @@ const Dashboard: React.FC = () => {
               <span className={styles.userEmail}>{user?.email}</span>
             </div>
           </div>
+
           <button className={styles.logoutButton} onClick={handleLogout}>
             <span className={styles.logoutIcon}>↩</span>
             <span className={styles.logoutText}>Logout</span>

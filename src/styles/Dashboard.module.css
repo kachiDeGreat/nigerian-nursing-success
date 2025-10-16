@@ -851,3 +851,160 @@
     transform: translateY(-1px);
   }
 }
+
+/* Admin Dropdown Styles */
+.adminDropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.adminToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminToggle:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+  color: #2d3748;
+}
+
+.adminIcon {
+  font-size: 1rem;
+}
+
+.adminText {
+  display: none;
+}
+
+.dropdownArrow {
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  margin-top: 0.5rem;
+  min-width: 200px;
+  animation: dropdownSlideIn 0.2s ease-out;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: #f7fafc;
+  color: #2d3748;
+}
+
+.dropdownItem:not(:last-child) {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.dropdownIcon {
+  font-size: 1rem;
+  width: 16px;
+  text-align: center;
+}
+
+/* Tablet Styles - Update the existing media query */
+@media (min-width: 768px) {
+  /* ... existing tablet styles ... */
+  
+  .adminText {
+    display: inline;
+  }
+  
+  .adminToggle {
+    padding: 0.5rem 1rem;
+  }
+  
+  .dropdownMenu {
+    left: auto;
+    right: 0;
+    min-width: 220px;
+  }
+}
+
+/* Desktop Styles - Update the existing media query */
+@media (min-width: 1024px) {
+  /* ... existing desktop styles ... */
+  
+  .adminDropdown {
+    margin-right: 1rem;
+  }
+  
+  .adminToggle:hover {
+    transform: translateY(-1px);
+  }
+  
+  .dropdownItem:hover {
+    background: #f8fafc;
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+  .navUser {
+    gap: 0.5rem;
+  }
+  
+  .adminDropdown {
+    order: -1;
+  }
+  
+  .dropdownMenu {
+    left: 0;
+    right: auto;
+    min-width: 180px;
+  }
+  
+  .userProfile {
+    flex: 1;
+    justify-content: flex-end;
+  }
+}

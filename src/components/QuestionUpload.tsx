@@ -4,12 +4,15 @@ import { addBulkQuizQuestions } from "../firebase/firestoreService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/QuestionUpload.module.css";
+import { useNavigate } from "react-router-dom";
 
 const QuestionUpload: React.FC = () => {
   const [password, setPassword] = useState("");
   const [showUpload, setShowUpload] = useState(false);
   const [questionsText, setQuestionsText] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+    const navigate = useNavigate();
+
   const [uploadResult, setUploadResult] = useState<{
     success: number;
     failed: number;
@@ -178,6 +181,13 @@ const QuestionUpload: React.FC = () => {
   if (!showUpload) {
     return (
       <div className={styles.authContainer}>
+         <button
+                  className={styles.backButton}
+                  onClick={() => navigate("/dashboard")}
+                  aria-label="Back to dashboard"
+                >
+                  ← Back to Dashboard
+                </button>
         <div className={styles.authCard}>
           <div className={styles.authHeader}>
             <div className={styles.logo}>
