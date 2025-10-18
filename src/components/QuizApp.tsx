@@ -6,6 +6,7 @@ import {
   updateQuizSession,
   getUserData,
   updateUserStats,
+  getQuestionCount,
 } from "../firebase/firestoreService";
 import type { QuizQuestion } from "../firebase/firestoreService";
 import { auth } from "../firebase/firebase";
@@ -24,15 +25,30 @@ const QuizApp: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [quizSessionId, setQuizSessionId] = useState<string | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState(1800);
+  const [timeRemaining, setTimeRemaining] = useState(3600); // 60 minutes in seconds
   const [isPaidUser, setIsPaidUser] = useState<boolean | null>(null);
-  const [showReview, setShowReview] = useState(false); // New state for review mode
+  const [showReview, setShowReview] = useState(false);
+  const [usedQuestionIds, setUsedQuestionIds] = useState<Set<string>>(
+    new Set()
+  );
+  const [totalQuestionCount, setTotalQuestionCount] = useState<number>(0);
 
   const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
 
   useEffect(() => {
     checkUserStatus();
+    loadQuestionCount();
+    // Load previously used question IDs from localStorage
+    const savedUsedQuestions = localStorage.getItem("usedQuestionIds");
+    if (savedUsedQuestions) {
+      try {
+        const parsedIds = JSON.parse(savedUsedQuestions);
+        setUsedQuestionIds(new Set(parsedIds));
+      } catch (error) {
+        console.error("Error loading used questions:", error);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -46,6 +62,15 @@ const QuizApp: React.FC = () => {
     }
     return () => clearInterval(timer);
   }, [quizStarted, quizCompleted, timeRemaining]);
+
+  const loadQuestionCount = async () => {
+    try {
+      const count = await getQuestionCount();
+      setTotalQuestionCount(count);
+    } catch (error) {
+      console.error("Error loading question count:", error);
+    }
+  };
 
   const checkUserStatus = async () => {
     if (!auth.currentUser) {
@@ -66,6 +91,107 @@ const QuizApp: React.FC = () => {
     }
   };
 
+  const getRandomQuestions = async (count: number = 50) => {
+    try {
+      // Adaptive pool size based on total questions available
+      const poolSize = Math.min(200, Math.max(100, totalQuestionCount || 100));
+      const allQuestions = await getRandomQuizQuestions(poolSize);
+
+      // Filter out previously used questions
+      const availableQuestions = allQuestions.filter(
+        (q) => q.id && !usedQuestionIds.has(q.id)
+      );
+
+      console.log(
+        `Available new questions: ${availableQuestions.length}, Total pool: ${allQuestions.length}`
+      );
+
+      // Smart selection strategy with multiple tiers
+      let selectedQuestions: QuizQuestion[];
+      const newQuestionRatio = availableQuestions.length / count;
+
+      if (newQuestionRatio >= 1) {
+        // Plenty of new questions available - use only new ones
+        selectedQuestions = availableQuestions
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count);
+      } else if (newQuestionRatio >= 0.8) {
+        // Good amount of new questions - use mostly new ones
+        selectedQuestions = availableQuestions
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count);
+      } else if (newQuestionRatio >= 0.5) {
+        // Moderate new questions - mix with minimal repeated
+        const repeatedNeeded = count - availableQuestions.length;
+        const repeatedQuestions = allQuestions
+          .filter((q) => q.id && usedQuestionIds.has(q.id))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, repeatedNeeded);
+
+        selectedQuestions = [...availableQuestions, ...repeatedQuestions]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count);
+      } else if (newQuestionRatio >= 0.2) {
+        // Limited new questions - balanced mix
+        const repeatedNeeded = count - availableQuestions.length;
+        const repeatedQuestions = allQuestions
+          .filter((q) => q.id && usedQuestionIds.has(q.id))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, repeatedNeeded);
+
+        selectedQuestions = [...availableQuestions, ...repeatedQuestions]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count);
+      } else {
+        // Few new questions - use what's available plus repeated
+        const repeatedNeeded = count - availableQuestions.length;
+        const repeatedQuestions = allQuestions
+          .filter((q) => q.id && usedQuestionIds.has(q.id))
+          .sort(() => Math.random() - 0.5)
+          .slice(0, repeatedNeeded);
+
+        selectedQuestions = [...availableQuestions, ...repeatedQuestions]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, count);
+      }
+
+      // Update used questions with smart size management
+      const newUsedQuestionIds = new Set(usedQuestionIds);
+      selectedQuestions.forEach((q) => {
+        if (q.id) {
+          newUsedQuestionIds.add(q.id);
+        }
+      });
+
+      // Smart size management - keep most recent questions
+      if (newUsedQuestionIds.size > 600) {
+        const arrayFromSet = Array.from(newUsedQuestionIds);
+        const trimmedArray = arrayFromSet.slice(-500); // Keep most recent 500
+        setUsedQuestionIds(new Set(trimmedArray));
+        localStorage.setItem("usedQuestionIds", JSON.stringify(trimmedArray));
+      } else {
+        setUsedQuestionIds(newUsedQuestionIds);
+        localStorage.setItem(
+          "usedQuestionIds",
+          JSON.stringify([...newUsedQuestionIds])
+        );
+      }
+
+      console.log(
+        `Selected ${selectedQuestions.length} questions (${
+          availableQuestions.length
+        } new, ${
+          selectedQuestions.length - availableQuestions.length
+        } repeated)`
+      );
+      return selectedQuestions;
+    } catch (error) {
+      console.error("Error in getRandomQuestions:", error);
+      // Fallback to basic random selection
+      return await getRandomQuizQuestions(count);
+    }
+  };
+
   const startQuiz = async () => {
     if (!isPaidUser) {
       alert("Please activate your account to access quizzes.");
@@ -74,7 +200,7 @@ const QuizApp: React.FC = () => {
 
     setLoading(true);
     try {
-      const randomQuestions = await getRandomQuizQuestions(20);
+      const randomQuestions = await getRandomQuestions(50);
       setQuestions(randomQuestions);
 
       if (auth.currentUser) {
@@ -169,7 +295,7 @@ const QuizApp: React.FC = () => {
       );
     }
 
-    if (timeRemaining < 300) {
+    if (timeRemaining < 600) {
       suggestions.push(
         "⏰ Practice with timed quizzes to improve your pacing.",
         "Learn to quickly identify question patterns to save time."
@@ -217,7 +343,7 @@ const QuizApp: React.FC = () => {
             score: finalScore,
             completed: true,
             completedAt: (await import("firebase/firestore")).Timestamp.now(),
-            duration: 1800 - timeRemaining,
+            duration: 3600 - timeRemaining,
           });
         } catch {
           console.log(
@@ -233,12 +359,11 @@ const QuizApp: React.FC = () => {
           finalScore,
           correctAnswers,
           questions.length,
-          Math.round((1800 - timeRemaining) / 60) // duration in minutes
+          Math.round((3600 - timeRemaining) / 60)
         );
         console.log("User stats updated successfully");
       } catch (error) {
         console.error("Failed to update user stats:", error);
-        // Continue even if stats update fails
       }
 
       setQuizCompleted(true);
@@ -258,7 +383,7 @@ const QuizApp: React.FC = () => {
     setQuizCompleted(false);
     setScore(0);
     setQuizSessionId(null);
-    setTimeRemaining(1800);
+    setTimeRemaining(3600);
     setShowReview(false);
   };
 
@@ -268,7 +393,6 @@ const QuizApp: React.FC = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Helper function to check if user got a question wrong
   const isQuestionIncorrect = (questionId: string) => {
     return (
       selectedAnswers[questionId] !==
@@ -326,7 +450,7 @@ const QuizApp: React.FC = () => {
                 </div>
                 <div className={styles.benefitItem}>
                   <span className={styles.benefitIcon}>✓</span>
-                  <span>Access to 10,000+ questions</span>
+                  <span>Access to all questions</span>
                 </div>
               </div>
 
@@ -358,13 +482,13 @@ const QuizApp: React.FC = () => {
           <div className={styles.loadingState}>
             <div className={styles.spinner}></div>
             <h2>Loading questions...</h2>
+            <p>Selecting the best questions for your practice session</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Show submitting state
   if (submitting) {
     return (
       <div className={styles.container}>
@@ -392,29 +516,39 @@ const QuizApp: React.FC = () => {
             <div className={styles.quizFeatures}>
               <div className={styles.feature}>
                 <span className={styles.featureIcon}>📝</span>
-                <span>20 random questions</span>
+                <span>50 carefully selected questions</span>
               </div>
               <div className={styles.feature}>
                 <span className={styles.featureIcon}>⏱️</span>
-                <span>30 minutes time limit</span>
+                <span>60 minutes time limit</span>
+              </div>
+              {/* <div className={styles.feature}>
+                <span className={styles.featureIcon}>🔀</span>
+                <span>Smart randomization - minimizes repetition</span>
               </div>
               <div className={styles.feature}>
-                <span className={styles.featureIcon}>🔍</span>
-                <span>Multiple choice format</span>
-              </div>
+                <span className={styles.featureIcon}>🔄</span>
+                <span>Dynamic question pool - always fresh content</span>
+              </div> */}
               <div className={styles.feature}>
                 <span className={styles.featureIcon}>📊</span>
                 <span>Instant results and analysis</span>
-              </div>
-              <div className={styles.feature}>
-                <span className={styles.featureIcon}>🎯</span>
-                <span>Personalized improvement suggestions</span>
               </div>
             </div>
 
             <button onClick={startQuiz} className={styles.startBtn}>
               Start Quiz
             </button>
+
+            {/* <div className={styles.quizInfo}>
+              <p>
+                <strong>Smart Quiz System:</strong> Our algorithm ensures you
+                get mostly new questions each time, drawing from our constantly
+                updated question database.
+                {totalQuestionCount > 0 &&
+                  ` Currently ${totalQuestionCount}+ questions available.`}
+              </p>
+            </div> */}
           </div>
         </div>
       </div>
@@ -430,7 +564,6 @@ const QuizApp: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.centerContent}>
           <div className={styles.quizCard}>
-            {/* Quiz Header */}
             <div className={styles.quizHeader}>
               <div className={styles.progressSection}>
                 <div className={styles.progressText}>
@@ -463,7 +596,6 @@ const QuizApp: React.FC = () => {
               </div>
             </div>
 
-            {/* Question Card */}
             <div className={styles.questionSection}>
               <h3 className={styles.questionText}>
                 {currentQuestion?.question}
@@ -487,11 +619,7 @@ const QuizApp: React.FC = () => {
                   }
 
                   return (
-                    <button
-                      key={index}
-                      className={optionStyle}
-                      disabled // Disable interaction in review mode
-                    >
+                    <button key={index} className={optionStyle} disabled>
                       <span className={styles.optionLetter}>
                         {String.fromCharCode(65 + index)}
                       </span>
@@ -509,7 +637,6 @@ const QuizApp: React.FC = () => {
                 })}
               </div>
 
-              {/* Explanation Section */}
               {currentQuestion?.explanation && (
                 <div className={styles.explanationSection}>
                   <h4>Explanation:</h4>
@@ -518,7 +645,6 @@ const QuizApp: React.FC = () => {
               )}
             </div>
 
-            {/* Navigation */}
             <div className={styles.navigationSection}>
               <button
                 onClick={prevQuestion}
@@ -586,7 +712,7 @@ const QuizApp: React.FC = () => {
                 <div className={styles.detailItem}>
                   <span className={styles.detailLabel}>Time Taken:</span>
                   <span className={styles.detailValue}>
-                    {formatTime(1800 - timeRemaining)}
+                    {formatTime(3600 - timeRemaining)}
                   </span>
                 </div>
                 <div className={styles.detailItem}>
@@ -607,25 +733,6 @@ const QuizApp: React.FC = () => {
             </div>
 
             <div className={styles.analysisSection}>
-              {/* <h3>Performance Insights</h3>
-
-              <div className={styles.performanceGrid}>
-                <div className={styles.performanceMetric}>
-                  <div className={styles.metricValue}>
-                    {Math.round(
-                      questions.length / ((1800 - timeRemaining) / 60)
-                    )}
-                  </div>
-                  <div className={styles.metricLabel}>Questions/Min</div>
-                </div>
-                <div className={styles.performanceMetric}>
-                  <div className={styles.metricValue}>
-                    {Math.round(((1800 - timeRemaining) / 1800) * 100)}%
-                  </div>
-                  <div className={styles.metricLabel}>Time Used</div>
-                </div>
-              </div> */}
-
               <div className={styles.suggestionsBox}>
                 <h4>Personalized Suggestions</h4>
                 <div className={styles.suggestionsList}>
@@ -637,7 +744,6 @@ const QuizApp: React.FC = () => {
                 </div>
               </div>
 
-              {/* Review Section */}
               {incorrectQuestions.length > 0 && (
                 <div className={styles.reviewSection}>
                   <h4>Review Incorrect Answers</h4>
@@ -648,7 +754,6 @@ const QuizApp: React.FC = () => {
                   <button
                     onClick={() => {
                       setShowReview(true);
-                      // Find first incorrect question
                       const firstIncorrectIndex = questions.findIndex((q) =>
                         isQuestionIncorrect(q.id!)
                       );
@@ -660,24 +765,6 @@ const QuizApp: React.FC = () => {
                   </button>
                 </div>
               )}
-
-              {/* <div className={styles.studyPlan}>
-                <h4>Recommended Study Plan</h4>
-                <div className={styles.planSteps}>
-                  <div className={styles.planStep}>
-                    <strong>This Week:</strong> Review missed questions and
-                    focus on weak areas
-                  </div>
-                  <div className={styles.planStep}>
-                    <strong>Next Week:</strong> Take 2-3 practice quizzes to
-                    track improvement
-                  </div>
-                  <div className={styles.planStep}>
-                    <strong>Ongoing:</strong> Daily 30-minute study sessions on
-                    core topics
-                  </div>
-                </div>
-              </div> */}
             </div>
 
             <div className={styles.resultActions}>
@@ -701,7 +788,6 @@ const QuizApp: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.centerContent}>
         <div className={styles.quizCard}>
-          {/* Quiz Header */}
           <div className={styles.quizHeader}>
             <div className={styles.progressSection}>
               <div className={styles.progressText}>
@@ -735,7 +821,6 @@ const QuizApp: React.FC = () => {
             </div>
           </div>
 
-          {/* Question Card */}
           <div className={styles.questionSection}>
             <h3 className={styles.questionText}>{currentQuestion?.question}</h3>
 
@@ -759,7 +844,6 @@ const QuizApp: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation */}
           <div className={styles.navigationSection}>
             <button
               onClick={prevQuestion}
