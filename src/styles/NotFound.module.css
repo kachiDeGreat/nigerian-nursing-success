@@ -1,0 +1,502 @@
+/* src/styles/NotFound.module.css */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Graphic Section */
+.graphicSection {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.numberGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.number {
+  font-size: 8rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(220, 38, 38, 0.6), 0 0 60px rgba(185, 28, 28, 0.4);
+  animation: float 3s ease-in-out infinite;
+}
+
+.number:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.number:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+.planet {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  animation: rotate 10s linear infinite;
+}
+
+.planetCore {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #ffffff, #fecaca);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.planetCore::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 15px;
+  height: 15px;
+  background: rgba(220, 38, 38, 0.4);
+  border-radius: 50%;
+}
+
+.planetCore::after {
+  content: "";
+  position: absolute;
+  bottom: 25%;
+  right: 20%;
+  width: 20px;
+  height: 20px;
+  background: rgba(185, 28, 28, 0.3);
+  border-radius: 50%;
+}
+
+.planetRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(25deg);
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  border-radius: 10px;
+}
+
+.astronaut {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: floatAstronaut 4s ease-in-out infinite;
+}
+
+.astronautBody {
+  position: relative;
+  width: 40px;
+  height: 50px;
+  background: white;
+  border-radius: 20px 20px 10px 10px;
+}
+
+.astronautHead {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background: white;
+  border-radius: 50%;
+}
+
+.astronautAntenna {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 10px;
+  background: #dc2626;
+  border-radius: 2px;
+}
+
+/* Message Section */
+.messageSection {
+  max-width: 600px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #fef2f2;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.description {
+  font-size: 1rem;
+  color: #fecaca;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+  color: #dc2626;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fef2f2;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.buttonIcon {
+  font-size: 1.125rem;
+}
+
+/* Quick Links */
+.quickLinks {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.quickLinksTitle {
+  font-size: 1.125rem;
+  color: #fef2f2;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.linksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.linkCard {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fef2f2;
+  text-decoration: none;
+}
+
+.linkCard:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.linkIcon {
+  font-size: 1.5rem;
+}
+
+.linkText {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Floating Stars */
+.floatingStars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.star {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.5rem;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatAstronaut {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  25% {
+    transform: translate(-50%, -55%) rotate(5deg);
+  }
+  75% {
+    transform: translate(-50%, -45%) rotate(-5deg);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .content {
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+    gap: 4rem;
+  }
+
+  .messageSection {
+    text-align: left;
+  }
+
+  .description {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .actionButtons {
+    justify-content: flex-start;
+  }
+
+  .quickLinks {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+  }
+
+  .number {
+    font-size: 10rem;
+  }
+
+  .planet {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    gap: 6rem;
+  }
+
+  .title {
+    font-size: 3.5rem;
+  }
+
+  .number {
+    font-size: 12rem;
+  }
+
+  .planet {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .content {
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+  }
+
+  .description {
+    font-size: 0.875rem;
+  }
+
+  .number {
+    font-size: 6rem;
+  }
+
+  .planet {
+    width: 60px;
+    height: 60px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .linksGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .graphicSection {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .numberGroup {
+    gap: 1rem;
+  }
+
+  .number {
+    font-size: 4.5rem;
+  }
+
+  .planet {
+    width: 50px;
+    height: 50px;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .number,
+  .planet,
+  .astronaut,
+  .star {
+    animation: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  }
+}
