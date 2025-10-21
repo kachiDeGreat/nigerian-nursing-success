@@ -12,12 +12,14 @@ import QuestionUpload from "../components/QuestionUpload";
 import QuizApp from "../components/QuizApp";
 import UserList from "../pages/UserList";
 import QuestionManager from "../components/QuestionManager";
+import NotFound from "../pages/NotFound";
 
 function Index() {
   return (
     <>
       <ScrollToTop />
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Welcome />} />
         <Route path="/account" element={<AuthPage />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
@@ -69,7 +71,6 @@ function Index() {
             </ProtectedRoute>
           }
         />
-        {/* Add more protected routes as needed */}
       </Routes>
     </>
   );
