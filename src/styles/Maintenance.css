@@ -1,0 +1,244 @@
+/* Maintenance.css */
+
+/* --- Page Layout --- */
+.maintenance-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.maintenance-container {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Main Card --- */
+.maintenance-card {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- Icon Animation --- */
+.icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: #fef2f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  margin: 0 auto 2rem auto;
+}
+
+.gear-icon {
+  animation: spinSlow 8s linear infinite;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Typography --- */
+.m-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.highlight-red {
+  color: #dc2626;
+  display: block;
+}
+
+.m-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+/* --- Stats Grid --- */
+.m-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.m-stat-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.m-stat-item:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+}
+
+.m-stat-number {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #dc2626;
+  margin-bottom: 0.25rem;
+}
+
+.m-stat-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* --- Form Section --- */
+.m-newsletter {
+  max-width: 450px;
+  margin: 0 auto 3rem auto;
+}
+
+.m-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.m-form-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.m-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.m-input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.m-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.m-btn:hover {
+  background: #b91c1c;
+}
+
+/* Success State Styles */
+.m-success-box {
+  background: #ecfdf5;
+  border: 1px solid #10b981;
+  color: #047857;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+}
+
+/* --- Social & Footer --- */
+.m-social-label {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.m-social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.m-social-icon {
+  width: 40px;
+  height: 40px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.m-social-icon:hover {
+  background: #dc2626;
+  color: white;
+  transform: translateY(-3px);
+}
+
+.m-footer-copy {
+  margin-top: 3rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* --- Responsive Media Queries --- */
+@media (min-width: 640px) {
+  .m-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .m-title {
+    font-size: 2.5rem;
+  }
+
+  .maintenance-card {
+    padding: 4rem 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .m-form-group {
+    flex-direction: column;
+  }
+
+  .m-btn {
+    width: 100%;
+  }
+}
