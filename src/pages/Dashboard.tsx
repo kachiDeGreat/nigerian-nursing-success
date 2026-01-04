@@ -13,7 +13,7 @@ import styles from "../styles/Dashboard.module.css";
 
 // WhatsApp Support Component
 const WhatsAppSupport: React.FC = () => {
-  const phoneNumber = "2348100790074"; // Replace with your actual WhatsApp number
+  const phoneNumber = "2347061110286"; // Replace with your actual WhatsApp number
   const message = "Hello! I need help with Nigerian Nursing Success.";
 
   const handleWhatsAppClick = () => {

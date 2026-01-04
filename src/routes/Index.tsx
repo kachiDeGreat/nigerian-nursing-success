@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AuthPage from "../pages/AuthPage";
-// import Welcome from "../pages/Welcome";
+import Welcome from "../pages/Welcome";
 import VerifyEmail from "../pages/VerifyEmail";
 import VerifySuccess from "../pages/VerifySuccess";
 import ResetPassword from "../pages/ResetPassword";
@@ -13,7 +13,7 @@ import QuizApp from "../components/QuizApp";
 import UserList from "../pages/UserList";
 import QuestionManager from "../components/QuestionManager";
 import NotFound from "../pages/NotFound";
-import Maintenance from "../pages/Maintenance";
+// import Maintenance from "../pages/Maintenance";
 
 function Index() {
   return (
@@ -21,8 +21,8 @@ function Index() {
       <ScrollToTop />
       <Routes>
         <Route path="*" element={<NotFound />} />
-        <Route path="/" element={<Maintenance />} />
-        {/* <Route path="/" element={<Welcome />} /> */}
+        {/* <Route path="/" element={<Maintenance />} /> */}
+        <Route path="/" element={<Welcome />} />
         <Route path="/account" element={<AuthPage />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-success" element={<VerifySuccess />} />
