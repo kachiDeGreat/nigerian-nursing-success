@@ -163,7 +163,7 @@ export const updateUserStats = async (
   score: number,
   correctAnswers: number,
   totalQuestions: number,
-  duration: number // in minutes
+  duration: number, // in minutes
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
@@ -207,20 +207,13 @@ export const updateUserStats = async (
     lastTestDate: Timestamp.now(),
     testScores: updatedTestScores,
   });
-
-  console.log("User stats updated successfully:", {
-    testsTaken: totalTests,
-    totalStudyTime: totalStudyTime,
-    averageScore: newAverageScore,
-    bestScore: newBestScore,
-  });
 };
 
 // Update payment status
 export const updatePaymentStatus = async (
   userId: string,
   status: "pending" | "paid" | "failed",
-  paystackReference?: string
+  paystackReference?: string,
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
 
@@ -242,7 +235,7 @@ export const updatePaymentStatus = async (
 
 // Create payment record
 export const createPaymentRecord = async (
-  paymentData: Omit<PaymentData, "id" | "createdAt">
+  paymentData: Omit<PaymentData, "id" | "createdAt">,
 ): Promise<string> => {
   const paymentsRef = collection(db, "payments");
   const docRef = await addDoc(paymentsRef, {
@@ -255,14 +248,14 @@ export const createPaymentRecord = async (
 
 // Verify payment by reference
 export const verifyPaymentByReference = async (
-  reference: string
+  reference: string,
 ): Promise<PaymentData | null> => {
   const paymentsRef = collection(db, "payments");
   const q = query(
     paymentsRef,
     where("paystackReference", "==", reference),
     orderBy("createdAt", "desc"),
-    limit(1)
+    limit(1),
   );
 
   const querySnapshot = await getDocs(q);
@@ -290,7 +283,7 @@ export const verifyPaymentByReference = async (
 // Add a new test score
 export const addTestScore = async (
   userId: string,
-  testScore: Omit<TestScore, "date">
+  testScore: Omit<TestScore, "date">,
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
@@ -311,7 +304,7 @@ export const addTestScore = async (
   // Calculate new average score
   const totalScore = updatedTestScores.reduce(
     (sum, score) => sum + score.score,
-    0
+    0,
   );
   const newAverageScore = Math.round(totalScore / updatedTestScores.length);
 
@@ -331,7 +324,7 @@ export const addTestScore = async (
 // Add a study session
 export const addStudySession = async (
   userId: string,
-  studySession: Omit<StudySession, "date">
+  studySession: Omit<StudySession, "date">,
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
@@ -359,7 +352,7 @@ export const addStudySession = async (
 export const updateUserAreas = async (
   userId: string,
   weakAreas: string[],
-  strongAreas: string[]
+  strongAreas: string[],
 ): Promise<void> => {
   const userRef = doc(db, "users", userId);
 
@@ -372,7 +365,7 @@ export const updateUserAreas = async (
 // Get recent test scores (for charts)
 export const getRecentTestScores = async (
   userId: string,
-  limitCount: number = 10
+  limitCount: number = 10,
 ): Promise<TestScore[]> => {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
@@ -391,7 +384,7 @@ export const getRecentTestScores = async (
 export const getStudySessionsByPeriod = async (
   userId: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): Promise<StudySession[]> => {
   const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
@@ -425,18 +418,18 @@ export const getUserStatistics = async (userId: string) => {
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
   const weeklyStudySessions = userData.studySessions.filter(
-    (session) => session.date.toDate() >= oneWeekAgo
+    (session) => session.date.toDate() >= oneWeekAgo,
   );
   const weeklyStudyTime = weeklyStudySessions.reduce(
     (total, session) => total + session.duration,
-    0
+    0,
   );
 
   // Calculate monthly progress
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
   const monthlyTestScores = userData.testScores.filter(
-    (score) => score.date.toDate() >= oneMonthAgo
+    (score) => score.date.toDate() >= oneMonthAgo,
   );
 
   return {
@@ -470,7 +463,7 @@ export const resetUserData = async (userId: string): Promise<void> => {
 
 // Quiz Question Functions
 export const addQuizQuestion = async (
-  question: Omit<QuizQuestion, "id" | "createdAt">
+  question: Omit<QuizQuestion, "id" | "createdAt">,
 ): Promise<string> => {
   const questionsRef = collection(db, "quizQuestions");
   const docRef = await addDoc(questionsRef, {
@@ -481,7 +474,7 @@ export const addQuizQuestion = async (
 };
 
 export const addBulkQuizQuestions = async (
-  questions: Omit<QuizQuestion, "id" | "createdAt">[]
+  questions: Omit<QuizQuestion, "id" | "createdAt">[],
 ): Promise<string[]> => {
   const questionsRef = collection(db, "quizQuestions");
   const docIds: string[] = [];
@@ -498,13 +491,13 @@ export const addBulkQuizQuestions = async (
 };
 
 export const getQuizQuestions = async (
-  limitCount: number = 50
+  limitCount: number = 50,
 ): Promise<QuizQuestion[]> => {
   const questionsRef = collection(db, "quizQuestions");
   const q = query(
     questionsRef,
     orderBy("createdAt", "desc"),
-    limit(limitCount)
+    limit(limitCount),
   );
   const querySnapshot = await getDocs(q);
 
@@ -513,12 +506,12 @@ export const getQuizQuestions = async (
       ({
         id: doc.id,
         ...doc.data(),
-      } as QuizQuestion)
+      }) as QuizQuestion,
   );
 };
 
 export const getRandomQuizQuestions = async (
-  count: number = 20
+  count: number = 20,
 ): Promise<QuizQuestion[]> => {
   const questionsRef = collection(db, "quizQuestions");
   const q = query(questionsRef, limit(100)); // Get more to randomize from
@@ -529,7 +522,7 @@ export const getRandomQuizQuestions = async (
       ({
         id: doc.id,
         ...doc.data(),
-      } as QuizQuestion)
+      }) as QuizQuestion,
   );
 
   // Shuffle and take required count
@@ -539,13 +532,13 @@ export const getRandomQuizQuestions = async (
 
 export const getQuestionsByCategory = async (
   category: string,
-  limitCount: number = 20
+  limitCount: number = 20,
 ): Promise<QuizQuestion[]> => {
   const questionsRef = collection(db, "quizQuestions");
   const q = query(
     questionsRef,
     where("category", "==", category),
-    limit(limitCount)
+    limit(limitCount),
   );
   const querySnapshot = await getDocs(q);
 
@@ -554,7 +547,7 @@ export const getQuestionsByCategory = async (
       ({
         id: doc.id,
         ...doc.data(),
-      } as QuizQuestion)
+      }) as QuizQuestion,
   );
 };
 
@@ -566,7 +559,7 @@ export const getQuestionCount = async (): Promise<number> => {
 
 // Quiz Session Functions
 export const createQuizSession = async (
-  session: Omit<QuizSession, "id" | "startedAt">
+  session: Omit<QuizSession, "id" | "startedAt">,
 ): Promise<string> => {
   const sessionsRef = collection(db, "quizSessions");
   const docRef = await addDoc(sessionsRef, {
@@ -578,14 +571,14 @@ export const createQuizSession = async (
 
 export const updateQuizSession = async (
   sessionId: string,
-  updates: Partial<QuizSession>
+  updates: Partial<QuizSession>,
 ): Promise<void> => {
   const sessionRef = doc(db, "quizSessions", sessionId);
   await updateDoc(sessionRef, updates);
 };
 
 export const getQuizSession = async (
-  sessionId: string
+  sessionId: string,
 ): Promise<QuizSession | null> => {
   const sessionRef = doc(db, "quizSessions", sessionId);
   const sessionSnap = await getDoc(sessionRef);
@@ -601,14 +594,14 @@ export const getQuizSession = async (
 
 export const getUserQuizSessions = async (
   userId: string,
-  limitCount: number = 10
+  limitCount: number = 10,
 ): Promise<QuizSession[]> => {
   const sessionsRef = collection(db, "quizSessions");
   const q = query(
     sessionsRef,
     where("userId", "==", userId),
     orderBy("startedAt", "desc"),
-    limit(limitCount)
+    limit(limitCount),
   );
   const querySnapshot = await getDocs(q);
 
@@ -617,12 +610,12 @@ export const getUserQuizSessions = async (
       ({
         id: doc.id,
         ...doc.data(),
-      } as QuizSession)
+      }) as QuizSession,
   );
 };
 
 export const getRecentQuizSessions = async (
-  limitCount: number = 50
+  limitCount: number = 50,
 ): Promise<QuizSession[]> => {
   const sessionsRef = collection(db, "quizSessions");
   const q = query(sessionsRef, orderBy("startedAt", "desc"), limit(limitCount));
@@ -633,7 +626,7 @@ export const getRecentQuizSessions = async (
       ({
         id: doc.id,
         ...doc.data(),
-      } as QuizSession)
+      }) as QuizSession,
   );
 };
 
@@ -641,7 +634,7 @@ export const getRecentQuizSessions = async (
 export const updateUserPerformance = async (
   userId: string,
   score: number,
-  category: string
+  category: string,
 ): Promise<void> => {
   const performanceRef = doc(db, "userPerformance", userId);
   const performanceSnap = await getDoc(performanceRef);
@@ -663,7 +656,7 @@ export const updateUserPerformance = async (
     const totalQuizzes = existingData.totalQuizzes + 1;
     const newAverageScore = Math.round(
       (existingData.averageScore * existingData.totalQuizzes + score) /
-        totalQuizzes
+        totalQuizzes,
     );
     const newBestScore = Math.max(existingData.bestScore, score);
 
@@ -689,7 +682,7 @@ export const updateUserPerformance = async (
 };
 
 export const getUserPerformance = async (
-  userId: string
+  userId: string,
 ): Promise<UserPerformance | null> => {
   const performanceRef = doc(db, "userPerformance", userId);
   const performanceSnap = await getDoc(performanceRef);
@@ -725,7 +718,7 @@ export const getUserQuizStats = async (userId: string) => {
   sessions.forEach((session) => {
     totalQuestionsAnswered += session.totalQuestions;
     correctAnswers += Math.round(
-      (session.score / 100) * session.totalQuestions
+      (session.score / 100) * session.totalQuestions,
     );
   });
 
@@ -831,7 +824,7 @@ export const deleteQuizQuestion = async (questionId: string): Promise<void> => {
 // Update question (admin only)
 export const updateQuizQuestion = async (
   questionId: string,
-  updates: Partial<QuizQuestion>
+  updates: Partial<QuizQuestion>,
 ): Promise<void> => {
   const questionRef = doc(db, "quizQuestions", questionId);
   await updateDoc(questionRef, updates);
@@ -840,7 +833,7 @@ export const updateQuizQuestion = async (
 // Search questions
 export const searchQuizQuestions = async (
   searchTerm: string,
-  limitCount: number = 20
+  limitCount: number = 20,
 ): Promise<QuizQuestion[]> => {
   const allQuestions = await getQuizQuestions(1000); // Get all questions for client-side search
 
@@ -849,10 +842,9 @@ export const searchQuizQuestions = async (
       question.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.options.some((option) =>
-        option.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+        option.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
   );
 
   return filteredQuestions.slice(0, limitCount);
 };
- 

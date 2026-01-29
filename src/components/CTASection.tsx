@@ -7,7 +7,6 @@ const CTASection: React.FC = () => {
 
   const handleGetStarted = () => {
     navigate("/account");
-    console.log("Get Started clicked");
   };
 
   // const handleContactSales = () => {

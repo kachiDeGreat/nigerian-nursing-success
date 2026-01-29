@@ -13,6 +13,7 @@ import QuizApp from "../components/QuizApp";
 import UserList from "../pages/UserList";
 import QuestionManager from "../components/QuestionManager";
 import NotFound from "../pages/NotFound";
+// import WeddingBulletin from "../pages/WeddingBulletin";
 // import Maintenance from "../pages/Maintenance";
 
 function Index() {

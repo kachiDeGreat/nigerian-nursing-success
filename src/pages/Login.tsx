@@ -27,7 +27,7 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
 
       if (!userCredential.user.emailVerified) {
@@ -38,7 +38,6 @@ const Login = () => {
         return;
       }
 
-      console.log("Logged in successfully!", userCredential.user);
       toast.success("Login successful! Redirecting...");
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
@@ -55,8 +54,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      console.log("Logged in with Google successfully!", userCredential.user);
+      await signInWithPopup(auth, provider);
       toast.success("Login with Google successful!");
       setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
@@ -81,10 +79,10 @@ const Login = () => {
       await sendPasswordResetEmail(
         auth,
         forgotPasswordEmail,
-        actionCodeSettings
+        actionCodeSettings,
       );
       toast.success(
-        "Password reset email sent! Check your inbox and spam folder."
+        "Password reset email sent! Check your inbox and spam folder.",
       );
       setShowForgotPassword(false);
       setForgotPasswordEmail("");

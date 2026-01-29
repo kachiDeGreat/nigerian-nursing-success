@@ -29,7 +29,7 @@ const QuizApp: React.FC = () => {
   const [isPaidUser, setIsPaidUser] = useState<boolean | null>(null);
   const [showReview, setShowReview] = useState(false);
   const [usedQuestionIds, setUsedQuestionIds] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [totalQuestionCount, setTotalQuestionCount] = useState<number>(0);
 
@@ -99,11 +99,7 @@ const QuizApp: React.FC = () => {
 
       // Filter out previously used questions
       const availableQuestions = allQuestions.filter(
-        (q) => q.id && !usedQuestionIds.has(q.id)
-      );
-
-      console.log(
-        `Available new questions: ${availableQuestions.length}, Total pool: ${allQuestions.length}`
+        (q) => q.id && !usedQuestionIds.has(q.id),
       );
 
       // Smart selection strategy with multiple tiers
@@ -173,17 +169,10 @@ const QuizApp: React.FC = () => {
         setUsedQuestionIds(newUsedQuestionIds);
         localStorage.setItem(
           "usedQuestionIds",
-          JSON.stringify([...newUsedQuestionIds])
+          JSON.stringify([...newUsedQuestionIds]),
         );
       }
 
-      console.log(
-        `Selected ${selectedQuestions.length} questions (${
-          availableQuestions.length
-        } new, ${
-          selectedQuestions.length - availableQuestions.length
-        } repeated)`
-      );
       return selectedQuestions;
     } catch (error) {
       console.error("Error in getRandomQuestions:", error);
@@ -226,7 +215,7 @@ const QuizApp: React.FC = () => {
         (error as { code?: string }).code === "permission-denied"
       ) {
         alert(
-          "Quiz access requires an active subscription. Please activate your account."
+          "Quiz access requires an active subscription. Please activate your account.",
         );
       } else {
         alert("Error starting quiz. Please try again.");
@@ -259,7 +248,7 @@ const QuizApp: React.FC = () => {
   const generatePersonalizedSuggestions = (
     score: number,
     correctAnswers: number,
-    totalQuestions: number
+    totalQuestions: number,
   ) => {
     const suggestions = [];
 
@@ -267,38 +256,38 @@ const QuizApp: React.FC = () => {
       suggestions.push(
         "🎉 Outstanding performance! You demonstrate excellent understanding of nursing concepts.",
         "Consider challenging yourself with advanced scenarios to further enhance your clinical judgment.",
-        "Share your study techniques with peers to help others improve."
+        "Share your study techniques with peers to help others improve.",
       );
     } else if (score >= 80) {
       suggestions.push(
         "👍 Strong performance! You have a solid grasp of core nursing concepts.",
         "Focus on refining your test-taking strategies to reach the 90+ score range.",
-        "Review the questions you missed to identify any recurring patterns."
+        "Review the questions you missed to identify any recurring patterns.",
       );
     } else if (score >= 70) {
       suggestions.push(
         "📚 Good foundation! You're on the right track with your nursing knowledge.",
         "Dedicate more time to practicing scenario-based questions.",
-        "Create flashcards for concepts you find challenging."
+        "Create flashcards for concepts you find challenging.",
       );
     } else if (score >= 60) {
       suggestions.push(
         "💪 Building momentum! Focus on strengthening your fundamental knowledge.",
         "Set aside regular study sessions for core nursing topics.",
-        "Practice with timed quizzes to improve your pace and accuracy."
+        "Practice with timed quizzes to improve your pace and accuracy.",
       );
     } else {
       suggestions.push(
         "🔄 Time for focused review! Start with fundamental nursing concepts.",
         "Break down complex topics into smaller, manageable study sessions.",
-        "Consider joining study groups for collaborative learning."
+        "Consider joining study groups for collaborative learning.",
       );
     }
 
     if (timeRemaining < 600) {
       suggestions.push(
         "⏰ Practice with timed quizzes to improve your pacing.",
-        "Learn to quickly identify question patterns to save time."
+        "Learn to quickly identify question patterns to save time.",
       );
     }
 
@@ -307,14 +296,14 @@ const QuizApp: React.FC = () => {
       suggestions.push(
         "🎯 Focus on reading questions carefully to avoid misinterpretation.",
         "Practice eliminating obviously wrong answers first.",
-        "Review basic nursing principles and protocols."
+        "Review basic nursing principles and protocols.",
       );
     }
 
     suggestions.push(
       "📖 Regular review of nursing fundamentals is key to consistent improvement.",
       "🧪 Practice with diverse question types to build comprehensive knowledge.",
-      "📊 Track your progress weekly to identify improvement areas."
+      "📊 Track your progress weekly to identify improvement areas.",
     );
 
     return suggestions.slice(0, 5);
@@ -345,10 +334,8 @@ const QuizApp: React.FC = () => {
             completedAt: (await import("firebase/firestore")).Timestamp.now(),
             duration: 3600 - timeRemaining,
           });
-        } catch {
-          console.log(
-            "Session update failed, but continuing with local results"
-          );
+        } catch (error) {
+          console.error("Failed to update quiz session:", error);
         }
       }
 
@@ -359,9 +346,8 @@ const QuizApp: React.FC = () => {
           finalScore,
           correctAnswers,
           questions.length,
-          Math.round((3600 - timeRemaining) / 60)
+          Math.round((3600 - timeRemaining) / 60),
         );
-        console.log("User stats updated successfully");
       } catch (error) {
         console.error("Failed to update user stats:", error);
       }
@@ -557,7 +543,7 @@ const QuizApp: React.FC = () => {
 
   if (quizCompleted && showReview) {
     const correctAnswers = questions.filter(
-      (q) => selectedAnswers[q.id!] === q.correctAnswer
+      (q) => selectedAnswers[q.id!] === q.correctAnswer,
     ).length;
 
     return (
@@ -675,17 +661,17 @@ const QuizApp: React.FC = () => {
 
   if (quizCompleted) {
     const correctAnswers = questions.filter(
-      (q) => selectedAnswers[q.id!] === q.correctAnswer
+      (q) => selectedAnswers[q.id!] === q.correctAnswer,
     ).length;
 
     const suggestions = generatePersonalizedSuggestions(
       score,
       correctAnswers,
-      questions.length
+      questions.length,
     );
 
     const incorrectQuestions = questions.filter((q) =>
-      isQuestionIncorrect(q.id!)
+      isQuestionIncorrect(q.id!),
     );
 
     return (
@@ -755,7 +741,7 @@ const QuizApp: React.FC = () => {
                     onClick={() => {
                       setShowReview(true);
                       const firstIncorrectIndex = questions.findIndex((q) =>
-                        isQuestionIncorrect(q.id!)
+                        isQuestionIncorrect(q.id!),
                       );
                       setCurrentQuestionIndex(firstIncorrectIndex);
                     }}

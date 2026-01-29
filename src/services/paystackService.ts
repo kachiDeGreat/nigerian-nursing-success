@@ -35,31 +35,8 @@ const PAYSTACK_BASE_URL = "https://api.paystack.co";
 // Log the configuration to the console for easier debugging
 if (!PAYSTACK_SECRET_KEY || !PAYSTACK_PUBLIC_KEY) {
   console.error(
-    "FATAL: Paystack keys are not defined in environment variables."
+    "FATAL: Paystack keys are not defined in environment variables.",
   );
-} else {
-//   console.log(
-//     `%cPAYSTACK: Using ${isLiveMode ? "LIVE 🟢" : "TEST 🟡"} environment`,
-//     `font-size: 1.2em; font-weight: bold; color: ${
-//       isLiveMode ? "green" : "orange"
-//     };`
-//   );
-//   console.log(
-//     "Using Secret Key:",
-//     PAYSTACK_SECRET_KEY.substring(0, 10) + "..."
-//   );
-//   console.log(
-//     "Using Public Key:",
-//     PAYSTACK_PUBLIC_KEY.substring(0, 10) + "..."
-//   );
-
-  // WARNING for live mode
-//   if (isLiveMode) {
-//     console.warn(
-//       "%c⚠️ LIVE MODE ACTIVE - REAL MONEY WILL BE CHARGED!",
-//       "font-size: 1.5em; font-weight: bold; color: red; background: yellow; padding: 10px;"
-//     );
-//   }
 }
 
 interface PaymentMetadata {
@@ -71,7 +48,7 @@ interface PaymentMetadata {
 export const initializePayment = async (
   email: string,
   amount: number,
-  metadata: PaymentMetadata
+  metadata: PaymentMetadata,
 ): Promise<PaystackResponse> => {
   if (!PAYSTACK_SECRET_KEY) {
     throw new Error("Paystack secret key not configured.");
@@ -93,7 +70,7 @@ export const initializePayment = async (
           metadata,
           callback_url: `${window.location.origin}/dashboard`,
         }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -112,7 +89,7 @@ export const initializePayment = async (
 
 // Verify Paystack payment (uses SECRET key)
 export const verifyPayment = async (
-  reference: string
+  reference: string,
 ): Promise<PaystackVerifyResponse> => {
   if (!PAYSTACK_SECRET_KEY) {
     throw new Error("Paystack secret key not configured.");
@@ -125,7 +102,7 @@ export const verifyPayment = async (
       headers: {
         Authorization: `Bearer ${PAYSTACK_SECRET_KEY}`,
       },
-    }
+    },
   );
 
   if (!response.ok) {
