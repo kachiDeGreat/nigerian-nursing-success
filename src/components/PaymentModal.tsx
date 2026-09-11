@@ -178,7 +178,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             <>
               <div className={styles.paymentInfo}>
                 <div className={styles.paymentIcon}>💰</div>
-                <h3 className={styles.paymentAmount}>₦4,000</h3>
+                <h3 className={styles.paymentAmount}>Free</h3>
                 <p className={styles.paymentDescription}>
                   One-time payment for full access to all nursing exam questions
                   and features
@@ -206,7 +206,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                   Initializing Payment...
                 </>
               ) : (
-                "🚀 Pay ₦4,000 with Paystack"
+                "🚀 Continue for Free"
               )}
             </button>
 

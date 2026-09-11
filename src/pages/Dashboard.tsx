@@ -5,11 +5,14 @@ import type { User } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { getUserData, initializeUserData } from "../firebase/firestoreService";
 import type { UserData } from "../firebase/firestoreService";
-import { initializePayment, verifyPayment } from "../services/paystackService";
 import styles from "../styles/Dashboard.module.css";
+import { 
+  Settings, Users, ClipboardList, Upload, LogOut, 
+  BarChart, FlaskConical, Clock, TrendingUp, BookOpen, CheckCircle 
+} from "lucide-react";
 
 // WhatsApp Support Component
 const WhatsAppSupport: React.FC = () => {
@@ -18,7 +21,7 @@ const WhatsAppSupport: React.FC = () => {
 
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
     window.open(url, "_blank");
   };
@@ -33,80 +36,6 @@ const WhatsAppSupport: React.FC = () => {
   );
 };
 
-// Paystack inline payment component
-const PaystackInlinePayment: React.FC<{
-  email: string;
-  amount: number;
-  publicKey: string;
-  onSuccess: (reference: string) => void;
-  onClose: () => void;
-}> = ({ email, amount, publicKey, onSuccess, onClose }) => {
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const handlePaystackPayment = () => {
-    if (!window.PaystackPop) {
-      toast.error("Payment service not available. Please refresh the page.");
-      return;
-    }
-
-    setIsProcessing(true);
-
-    const handler = window.PaystackPop.setup({
-      key: publicKey,
-      email: email,
-      amount: amount * 100,
-      currency: "NGN",
-      ref: `ref-${Date.now()}`,
-      onClose: () => {
-        setIsProcessing(false);
-        onClose();
-        toast.info("Payment window closed");
-      },
-      callback: (response: { reference: string }) => {
-        setIsProcessing(false);
-        onSuccess(response.reference);
-        toast.success("Payment successful!");
-      },
-    });
-
-    handler.openIframe();
-  };
-
-  return (
-    <div className={styles.paymentOverlay}>
-      <div className={styles.paymentModal}>
-        <h3>Complete Your Payment</h3>
-        <p>You'll be redirected to a secure payment page within this window.</p>
-
-        <div className={styles.paymentActions}>
-          <button
-            onClick={handlePaystackPayment}
-            disabled={isProcessing}
-            className={styles.proceedButton}
-          >
-            {isProcessing ? (
-              <>
-                {/* <div className={styles.spinner}></div> */}
-                Processing...
-              </>
-            ) : (
-              "Proceed to Payment"
-            )}
-          </button>
-
-          <button
-            onClick={onClose}
-            disabled={isProcessing}
-            className={styles.cancelPaymentButton}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // Admin Dropdown Component
 const AdminDropdown: React.FC<{
   showDropdown: boolean;
@@ -116,7 +45,7 @@ const AdminDropdown: React.FC<{
   return (
     <div className={styles.adminDropdown}>
       <button className={styles.adminToggle} onClick={onToggle}>
-        <span className={styles.adminIcon}>⚙️</span>
+        <span className={styles.adminIcon}><Settings size={16} /></span>
         <span className={styles.adminText}>Admin</span>
         <span className={styles.dropdownArrow}>{showDropdown ? "▲" : "▼"}</span>
       </button>
@@ -127,21 +56,21 @@ const AdminDropdown: React.FC<{
             className={styles.dropdownItem}
             onClick={() => onNavigate("/userlist")}
           >
-            <span className={styles.dropdownIcon}>👥</span>
+            <span className={styles.dropdownIcon}><Users size={16} /></span>
             User List
           </button>
           <button
             className={styles.dropdownItem}
             onClick={() => onNavigate("/admin/manage-questions")}
           >
-            <span className={styles.dropdownIcon}>📋</span>
+            <span className={styles.dropdownIcon}><ClipboardList size={16} /></span>
             Manage Questions
           </button>
           <button
             className={styles.dropdownItem}
             onClick={() => onNavigate("/admin/upload-questions")}
           >
-            <span className={styles.dropdownIcon}>📤</span>
+            <span className={styles.dropdownIcon}><Upload size={16} /></span>
             Upload Questions
           </button>
         </div>
@@ -154,10 +83,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [showPaystackInline, setShowPaystackInline] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [showAdminDropdown, setShowAdminDropdown] = useState(false);
 
   // Check if user is admin
@@ -174,12 +100,6 @@ const Dashboard: React.FC = () => {
           await initializeUserData(currentUser);
           const data = await getUserData(currentUser.uid);
           setUserData(data);
-
-          if (data && !data.isActive) {
-            setTimeout(() => {
-              setShowPaymentModal(true);
-            }, 1000);
-          }
         } catch (error) {
           console.error("Error loading user data:", error);
           toast.error("Failed to load user data");
@@ -206,63 +126,13 @@ const Dashboard: React.FC = () => {
       },
       (error) => {
         console.error("Error listening to user data:", error);
-      }
+      },
     );
 
     return () => {
       unsubscribeFirestore();
     };
   }, [user]);
-
-  const handlePaymentInit = async () => {
-    if (!user?.email) {
-      toast.error("User email not found");
-      return;
-    }
-
-    setIsProcessingPayment(true);
-    try {
-      const paymentResponse = await initializePayment(user.email, 4000, {
-        userId: user.uid,
-        displayName: user.displayName || "",
-      });
-
-      if (paymentResponse.status) {
-        setShowPaystackInline(true);
-        setShowPaymentModal(false);
-      } else {
-        toast.error("Failed to initialize payment");
-      }
-    } catch (error) {
-      console.error("Payment initialization error:", error);
-      toast.error("Payment service temporarily unavailable");
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  const handlePaymentSuccess = async (reference: string) => {
-    if (!user) return;
-
-    try {
-      const verification = await verifyPayment(reference);
-      if (verification.data.status === "success") {
-        const userRef = doc(db, "users", user.uid);
-        await updateDoc(userRef, {
-          paymentStatus: "paid",
-          isActive: true,
-          paystackReference: reference,
-        });
-        setShowPaystackInline(false);
-        toast.success("Payment verified! Your account is now active.");
-      } else {
-        toast.error("Payment verification failed");
-      }
-    } catch (error) {
-      console.error("Payment verification error:", error);
-      toast.error("Failed to verify payment");
-    }
-  };
 
   const handleLogout = async () => {
     try {
@@ -308,14 +178,9 @@ const Dashboard: React.FC = () => {
   }
 
   function handlePracticeTests(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     event.preventDefault();
-    if (!userData?.isActive) {
-      toast.info("Please activate your account to access practice tests.");
-      setShowPaymentModal(true);
-      return;
-    }
     navigate("/quiz");
   }
 
@@ -350,106 +215,11 @@ const Dashboard: React.FC = () => {
           </div>
 
           <button className={styles.logoutButton} onClick={handleLogout}>
-            <span className={styles.logoutIcon}>↩</span>
+            <span className={styles.logoutIcon}><LogOut size={16} /></span>
             <span className={styles.logoutText}>Logout</span>
           </button>
         </div>
       </nav>
-
-      {/* Payment Modal */}
-      {showPaymentModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>Activate Your Account</h2>
-              <button
-                className={styles.closeButton}
-                onClick={() => setShowPaymentModal(false)}
-                disabled={isProcessingPayment}
-              >
-                ×
-              </button>
-            </div>
-
-            <div className={styles.modalBody}>
-              <div className={styles.paymentInfo}>
-                <h3 className={styles.paymentAmount}>₦4,000</h3>
-                <p className={styles.paymentDescription}>
-                  One-time payment for full access to all nursing exam questions
-                  and features
-                </p>
-              </div>
-
-              <div className={styles.featuresList}>
-                <h4 className={styles.featuresTitle}>What you'll get:</h4>
-                <ul className={styles.features}>
-                  <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    Access to 10,000+ nursing exam questions
-                  </li>
-                  <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    Timed practice tests with real exam simulation
-                  </li>
-                  <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    Detailed performance analytics
-                  </li>
-                  <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    Mobile-friendly platform
-                  </li>
-                  <li className={styles.featureItem}>
-                    <span className={styles.featureIcon}>✓</span>
-                    24/7 access to study materials
-                  </li>
-                </ul>
-              </div>
-
-              <div className={styles.securityNote}>
-                <span className={styles.securityIcon}>🔒</span>
-                Secure payment processed by Paystack
-              </div>
-            </div>
-
-            <div className={styles.modalFooter}>
-              <button
-                className={styles.payButton}
-                onClick={handlePaymentInit}
-                disabled={isProcessingPayment}
-              >
-                {isProcessingPayment ? (
-                  <>
-                    {/* <div className={styles.spinner}></div> */}
-                    Initializing Payment...
-                  </>
-                ) : (
-                  "Pay ₦4,000 with Paystack"
-                )}
-              </button>
-
-              <button
-                className={styles.cancelButton}
-                onClick={() => setShowPaymentModal(false)}
-                disabled={isProcessingPayment}
-              >
-                Maybe Later
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Paystack Inline Payment */}
-      {showPaystackInline && user?.email && (
-        <PaystackInlinePayment
-          email={user.email}
-          amount={4000}
-          publicKey={import.meta.env.VITE_PAYSTACK_PUBLIC_KEY}
-          onSuccess={handlePaymentSuccess}
-          onClose={() => setShowPaystackInline(false)}
-        />
-      )}
 
       <div className={styles.container}>
         <header className={styles.header}>
@@ -464,7 +234,7 @@ const Dashboard: React.FC = () => {
           {/* Stats Grid */}
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📊</div>
+              <div className={styles.statIcon}><BarChart size={32} /></div>
               <div className={styles.statInfo}>
                 <div className={styles.statNumber}>
                   {userData?.loginCount || 1}
@@ -474,7 +244,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>🧪</div>
+              <div className={styles.statIcon}><FlaskConical size={32} /></div>
               <div className={styles.statInfo}>
                 <div className={styles.statNumber}>
                   {userData?.testsTaken || 0}
@@ -484,7 +254,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>⏱️</div>
+              <div className={styles.statIcon}><Clock size={32} /></div>
               <div className={styles.statInfo}>
                 <div className={styles.statNumber}>
                   {userData?.totalStudyTime
@@ -496,7 +266,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📈</div>
+              <div className={styles.statIcon}><TrendingUp size={32} /></div>
               <div className={styles.statInfo}>
                 <div className={styles.statNumber}>
                   {userData?.averageScore ? `${userData.averageScore}%` : "--%"}
@@ -510,119 +280,74 @@ const Dashboard: React.FC = () => {
           <div className={styles.statusCard}>
             <div className={styles.statusHeader}>
               <h3 className={styles.statusTitle}>Account Status</h3>
-              <span
-                className={`${styles.statusBadge} ${
-                  userData?.isActive ? styles.active : styles.inactive
-                }`}
-              >
-                {userData?.isActive ? "ACTIVE" : "INACTIVE"}
+              <span className={`${styles.statusBadge} ${styles.active}`}>
+                ACTIVE
               </span>
             </div>
 
             <div className={styles.statusContent}>
-              {userData?.isActive ? (
-                <div className={styles.activeStatus}>
-                  <div className={styles.successIcon}>✓</div>
-                  <div>
-                    <h4 className={styles.activeTitle}>Account Activated</h4>
-                    <p className={styles.activeText}>
-                      Full access to all nursing exam questions and premium
-                      features.
-                    </p>
-                  </div>
+              <div className={styles.activeStatus}>
+                <div className={styles.successIcon}><CheckCircle size={24} /></div>
+                <div>
+                  <h4 className={styles.activeTitle}>Account Activated</h4>
+                  <p className={styles.activeText}>
+                    Full access to all nursing exam questions and premium
+                    features.
+                  </p>
                 </div>
-              ) : (
-                <div className={styles.inactiveStatus}>
-                  <div className={styles.warningIcon}>!</div>
-                  <div>
-                    <h4 className={styles.inactiveTitle}>
-                      Account Not Activated
-                    </h4>
-                    <p className={styles.inactiveText}>
-                      Complete your payment to unlock all features and exam
-                      questions.
-                    </p>
-                    <button
-                      className={styles.activateButton}
-                      onClick={() => setShowPaymentModal(true)}
-                    >
-                      Activate Account - ₦4,000
-                    </button>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
 
           {/* Features Grid */}
-          {userData?.isActive ? (
-            <div className={styles.featuresGrid}>
-              <div className={styles.featureCard}>
-                <div className={styles.featureIcon}>🧪</div>
-                <h4 className={styles.featureTitle}>Practice Tests</h4>
-                <p className={styles.featureText}>
-                  Access 10,000+ nursing exam questions with timed tests and
-                  real exam simulation.
-                </p>
-                <button
-                  className={styles.featureButton}
-                  onClick={handlePracticeTests}
-                  // disabled
-                  // className={`${styles.featureButton} ${styles.disabledButton}`}
-                >
-                  Start Practice Test
-                  {/* <span className={styles.comingSoonBadge}>Coming Soon</span> */}
-                </button>
-              </div>
-
-              <div className={styles.featureCard}>
-                <div className={styles.featureIcon}>📊</div>
-                <h4 className={styles.featureTitle}>Progress Analytics</h4>
-                <p className={styles.featureText}>
-                  Track your performance, identify weak areas, and monitor your
-                  improvement.
-                </p>
-                <button
-                  disabled
-                  className={`${styles.featureButton} ${styles.disabledButton}`}
-                >
-                  View Progress
-                  <span className={styles.comingSoonBadge}>Coming Soon</span>
-                </button>
-              </div>
-
-              <div className={styles.featureCard}>
-                <div className={styles.featureIcon}>📖</div>
-                <h4 className={styles.featureTitle}>Study Materials</h4>
-                <p className={styles.featureText}>
-                  Comprehensive nursing study guides, resources, and reference
-                  materials.
-                </p>
-                <button
-                  disabled
-                  className={`${styles.featureButton} ${styles.disabledButton}`}
-                >
-                  Browse Materials
-                  <span className={styles.comingSoonBadge}>Coming Soon</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className={styles.lockedFeatures}>
-              <div className={styles.lockedIcon}>🔒</div>
-              <h3 className={styles.lockedTitle}>Premium Features Locked</h3>
-              <p className={styles.lockedText}>
-                Activate your account to unlock practice tests, progress
-                analytics, study materials, and more advanced features.
+          <div className={styles.featuresGrid}>
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><FlaskConical size={32} /></div>
+              <h4 className={styles.featureTitle}>Practice Tests</h4>
+              <p className={styles.featureText}>
+                Access 10,000+ nursing exam questions with timed tests and real
+                exam simulation.
               </p>
               <button
-                className={styles.unlockButton}
-                onClick={() => setShowPaymentModal(true)}
+                className={styles.featureButton}
+                onClick={handlePracticeTests}
               >
-                Unlock All Features - ₦4,000
+                Start Practice Test
               </button>
             </div>
-          )}
+
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><BarChart size={32} /></div>
+              <h4 className={styles.featureTitle}>Progress Analytics</h4>
+              <p className={styles.featureText}>
+                Track your performance, identify weak areas, and monitor your
+                improvement.
+              </p>
+              <button
+                disabled
+                className={`${styles.featureButton} ${styles.disabledButton}`}
+              >
+                View Progress
+                <span className={styles.comingSoonBadge}>Coming Soon</span>
+              </button>
+            </div>
+
+            <div className={styles.featureCard}>
+              <div className={styles.featureIcon}><BookOpen size={32} /></div>
+              <h4 className={styles.featureTitle}>Study Materials</h4>
+              <p className={styles.featureText}>
+                Comprehensive nursing study guides, resources, and reference
+                materials.
+              </p>
+              <button
+                disabled
+                className={`${styles.featureButton} ${styles.disabledButton}`}
+              >
+                Browse Materials
+                <span className={styles.comingSoonBadge}>Coming Soon</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/Navbar.module.css";
+import { Hospital } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
@@ -19,7 +20,7 @@ const Navbar: React.FC = () => {
       <div className={styles.container}>
         {/* Logo */}
         <div className={styles.logo}>
-          <span className={styles.logoIcon}>🏥</span>
+          <span className={styles.logoIcon}><Hospital size={24} /></span>
           <span className={styles.logoText}>
             Nigerian Nursing{" "}
             <span className={styles.logoHighlight}>Success</span>

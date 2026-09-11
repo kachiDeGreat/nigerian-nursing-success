@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/Testimonials.module.css";
+import { Star, Quote } from "lucide-react";
 
 const Testimonials: React.FC = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -63,7 +64,7 @@ const Testimonials: React.FC = () => {
         {/* Section Header */}
         <div className={styles.sectionHeader}>
           <div className={styles.headerBadge}>
-            <span className={styles.badgeIcon}>🌟</span>
+            <span className={styles.badgeIcon}><Star size={16} /></span>
             <span>Success Stories</span>
           </div>
           <h2 className={styles.sectionTitle}>
@@ -86,7 +87,7 @@ const Testimonials: React.FC = () => {
                 }`}
               >
                 <div className={styles.testimonialCard}>
-                  <div className={styles.quoteIcon}>❝</div>
+                  <div className={styles.quoteIcon}><Quote size={32} /></div>
                   <p className={styles.testimonialContent}>
                     {testimonial.content}
                   </p>
@@ -94,7 +95,7 @@ const Testimonials: React.FC = () => {
                   <div className={styles.rating}>
                     {[...Array(testimonial.rating)].map((_, i) => (
                       <span key={i} className={styles.star}>
-                        ⭐
+                        <Star size={16} fill="currentColor" />
                       </span>
                     ))}
                   </div>

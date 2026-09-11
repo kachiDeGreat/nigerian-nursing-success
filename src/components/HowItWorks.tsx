@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../styles/Welcome.module.css";
+import { User, ClipboardEdit, Target, BarChart, Users, Trophy, Video, Play } from "lucide-react";
 
 const HowItWorks: React.FC = () => {
   const steps = [
@@ -8,42 +9,42 @@ const HowItWorks: React.FC = () => {
       title: "Create Your Account",
       description:
         "Sign up in less than 2 minutes and get immediate access to free practice questions.",
-      icon: "👤",
+      icon: <User size={24} />,
     },
     {
       number: "02",
       title: "Take Assessment Test",
       description:
         "Complete our initial assessment to identify your current knowledge level and weak areas.",
-      icon: "📝",
+      icon: <ClipboardEdit size={24} />,
     },
     {
       number: "03",
       title: "Personalized Study Plan",
       description:
         "Receive a customized study plan based on your assessment results and target exam date.",
-      icon: "🎯",
+      icon: <Target size={24} />,
     },
     {
       number: "04",
       title: "Practice & Track Progress",
       description:
         "Work through practice questions, mock exams, and track your improvement with detailed analytics.",
-      icon: "📊",
+      icon: <BarChart size={24} />,
     },
     {
       number: "05",
       title: "Join Study Groups",
       description:
         "Collaborate with other nursing students in dedicated study groups and discussion forums.",
-      icon: "👥",
+      icon: <Users size={24} />,
     },
     {
       number: "06",
       title: "Exam Success",
       description:
         "Walk into your nursing council exam with confidence and achieve your desired results.",
-      icon: "🏆",
+      icon: <Trophy size={24} />,
     },
   ];
 
@@ -81,12 +82,12 @@ const HowItWorks: React.FC = () => {
               for your nursing exams
             </p>
             <button className={`${styles.btn} ${styles.btnPrimary}`}>
-              🎥 Watch Demo Video
+              <Video size={16} style={{ marginRight: '8px' }} /> Watch Demo Video
             </button>
           </div>
           <div className={styles.demoVideo}>
             <div className={styles.videoPlaceholder}>
-              <div className={styles.playButton}>▶</div>
+              <div className={styles.playButton}><Play size={24} /></div>
               <p>Platform Demo Video</p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../styles/CTASection.module.css";
 import { useNavigate } from "react-router-dom";
+import { Rocket, BookOpen, Clock, Smartphone, Users, ArrowRight, Target } from "lucide-react";
 
 const CTASection: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const CTASection: React.FC = () => {
           {/* Section Header */}
           <div className={styles.sectionHeader}>
             <div className={styles.headerBadge}>
-              <span className={styles.badgeIcon}>🚀</span>
+              <span className={styles.badgeIcon}><Rocket size={16} /></span>
               <span>Get Started Today</span>
             </div>
             <h2 className={styles.sectionTitle}>
@@ -36,7 +37,7 @@ const CTASection: React.FC = () => {
           {/* Features Grid */}
           <div className={styles.featuresGrid}>
             <div className={styles.featureItem}>
-              <div className={styles.featureIcon}>📚</div>
+              <div className={styles.featureIcon}><BookOpen size={24} /></div>
               <div className={styles.featureContent}>
                 <h4 className={styles.featureTitle}>10,000+ Questions</h4>
                 <p className={styles.featureText}>
@@ -45,7 +46,7 @@ const CTASection: React.FC = () => {
               </div>
             </div>
             <div className={styles.featureItem}>
-              <div className={styles.featureIcon}>⏱️</div>
+              <div className={styles.featureIcon}><Clock size={24} /></div>
               <div className={styles.featureContent}>
                 <h4 className={styles.featureTitle}>Timed Tests</h4>
                 <p className={styles.featureText}>
@@ -54,7 +55,7 @@ const CTASection: React.FC = () => {
               </div>
             </div>
             <div className={styles.featureItem}>
-              <div className={styles.featureIcon}>📱</div>
+              <div className={styles.featureIcon}><Smartphone size={24} /></div>
               <div className={styles.featureContent}>
                 <h4 className={styles.featureTitle}>Study Anywhere</h4>
                 <p className={styles.featureText}>
@@ -63,7 +64,7 @@ const CTASection: React.FC = () => {
               </div>
             </div>
             <div className={styles.featureItem}>
-              <div className={styles.featureIcon}>🤝</div>
+              <div className={styles.featureIcon}><Users size={24} /></div>
               <div className={styles.featureContent}>
                 <h4 className={styles.featureTitle}>Community Support</h4>
                 <p className={styles.featureText}>
@@ -76,8 +77,8 @@ const CTASection: React.FC = () => {
           {/* CTA Actions */}
           <div className={styles.ctaActions}>
             <button className={styles.primaryButton} onClick={handleGetStarted}>
-              <span className={styles.buttonText}>Start Now - ₦4,000</span>
-              <span className={styles.buttonArrow}>→</span>
+              <span className={styles.buttonText}>Start Now</span>
+              <span className={styles.buttonArrow}><ArrowRight size={20} /></span>
             </button>
             {/* <button
               className={styles.secondaryButton}
@@ -90,7 +91,7 @@ const CTASection: React.FC = () => {
           {/* Guarantee Section */}
           <div className={styles.guaranteeSection}>
             <div className={styles.guaranteeBadge}>
-              <span className={styles.guaranteeIcon}>🎯</span>
+              <span className={styles.guaranteeIcon}><Target size={16} /></span>
               <span>98% Pass Guarantee</span>
             </div>
             <p className={styles.guaranteeText}>

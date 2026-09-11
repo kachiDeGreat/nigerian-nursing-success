@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../styles/Hero.module.css";
 import { useNavigate } from "react-router-dom";
+import { Target, CheckCircle, ArrowRight, ArrowDown } from "lucide-react";
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Hero: React.FC = () => {
         {/* Background Image with Fixed Positioning */}
         <div className={styles.backgroundContainer}>
           <img
-            src="https://dropimg.onyekachi.dev/cayzzc6btyjqencwbkny"
+            src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/cayzzc6btyjqencwbkny"
             alt="Nursing exam preparation"
             className={styles.heroImage}
             loading="eager"
@@ -29,7 +30,8 @@ const Hero: React.FC = () => {
             <div className={styles.mainContent}>
               <div className={styles.textSection}>
                 <div className={styles.badge}>
-                  🎯 Trusted by 5,000+ Nigerian Nurses
+                  <Target size={16} style={{ marginRight: '8px' }} />
+                  Trusted by 5,000+ Nigerian Nurses
                 </div>
 
                 <h1 className={styles.title}>
@@ -42,11 +44,11 @@ const Hero: React.FC = () => {
 
                 <div className={styles.features}>
                   <div className={styles.feature}>
-                    <span className={styles.featureIcon}>✓</span>
+                    <span className={styles.featureIcon}><CheckCircle size={16} /></span>
                     <span>Real Past Questions</span>
                   </div>
                   <div className={styles.feature}>
-                    <span className={styles.featureIcon}>✓</span>
+                    <span className={styles.featureIcon}><CheckCircle size={16} /></span>
                     <span>Timed Practice Tests</span>
                   </div>
                   {/* <div className={styles.feature}>
@@ -61,9 +63,9 @@ const Hero: React.FC = () => {
                     onClick={handleGetStarted}
                   >
                     <span className={styles.buttonText}>
-                      Start Learning Now - ₦4,000
+                      Start Learning Now
                     </span>
-                    <span className={styles.buttonArrow}>→</span>
+                    <span className={styles.buttonArrow}><ArrowRight size={20} /></span>
                   </button>
 
                   <div className={styles.trustIndicators}>
@@ -109,7 +111,7 @@ const Hero: React.FC = () => {
         {/* Scroll Hint */}
         <div className={styles.scrollHint}>
           <span>See how it works</span>
-          <div className={styles.scrollArrow}>↓</div>
+          <div className={styles.scrollArrow}><ArrowDown size={20} /></div>
         </div>
       </section>
     </>

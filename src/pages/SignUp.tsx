@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, actionCodeSettings } from "../firebase/firebase";
+import { User, Mail, Lock } from "lucide-react";
 
 const SignUp = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -97,7 +98,7 @@ const SignUp = () => {
             placeholder="Full Name"
             required
           />
-          <span className={styles.inputIcon}>👤</span>
+          <span className={styles.inputIcon}><User size={20} /></span>
         </div>
         <div className={styles.inputGroup}>
           <input
@@ -108,7 +109,7 @@ const SignUp = () => {
             placeholder="Email"
             required
           />
-          <span className={styles.inputIcon}>✉️</span>
+          <span className={styles.inputIcon}><Mail size={20} /></span>
         </div>
         <div className={styles.inputGroup}>
           <input
@@ -119,7 +120,7 @@ const SignUp = () => {
             placeholder="Password"
             required
           />
-          <span className={styles.inputIcon}>🔒</span>
+          <span className={styles.inputIcon}><Lock size={20} /></span>
           <button
             type="button"
             className={styles.passwordToggle}

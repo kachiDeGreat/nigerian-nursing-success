@@ -4,7 +4,6 @@ import {
   getRandomQuizQuestions,
   createQuizSession,
   updateQuizSession,
-  getUserData,
   updateUserStats,
   getQuestionCount,
 } from "../firebase/firestoreService";
@@ -78,17 +77,8 @@ const QuizApp: React.FC = () => {
       return;
     }
 
-    try {
-      const userData = await getUserData(auth.currentUser.uid);
-      if (userData?.isActive) {
-        setIsPaidUser(true);
-      } else {
-        setIsPaidUser(false);
-      }
-    } catch (error) {
-      console.error("Error checking user status:", error);
-      setIsPaidUser(false);
-    }
+    // Unconditionally set isPaidUser to true since the payment gate has been removed.
+    setIsPaidUser(true);
   };
 
   const getRandomQuestions = async (count: number = 50) => {
@@ -445,7 +435,7 @@ const QuizApp: React.FC = () => {
                   onClick={() => navigate("/dashboard")}
                   className={styles.primaryBtn}
                 >
-                  Activate Account - ₦4,000
+                  Activate Account
                 </button>
                 <button
                   onClick={() => navigate("/dashboard")}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/AboutUs.module.css";
 import { useNavigate } from "react-router-dom";
+import { GraduationCap, BookOpen, CheckCircle, Target, Users, ArrowRight } from "lucide-react";
 
 const AboutUs: React.FC = () => {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ const AboutUs: React.FC = () => {
         {/* Section Header */}
         <div className={styles.sectionHeader}>
           <div className={styles.headerBadge}>
-            <span className={styles.badgeIcon}>🎓</span>
+            <span className={styles.badgeIcon}><GraduationCap size={16} /></span>
             <span>About Us</span>
           </div>
           <h2 className={styles.sectionTitle}>
@@ -124,14 +125,14 @@ const AboutUs: React.FC = () => {
             {/* Quick Stats */}
             <div className={styles.quickStats}>
               <div className={styles.statBox}>
-                <div className={styles.statIcon}>📚</div>
+                <div className={styles.statIcon}><BookOpen size={24} /></div>
                 <div className={styles.statInfo}>
                   <div className={styles.statValue}>10,000+</div>
                   <div className={styles.statLabel}>Questions</div>
                 </div>
               </div>
               <div className={styles.statBox}>
-                <div className={styles.statIcon}>✅</div>
+                <div className={styles.statIcon}><CheckCircle size={24} /></div>
                 <div className={styles.statInfo}>
                   <div className={styles.statValue}>98%</div>
                   <div className={styles.statLabel}>Pass Rate</div>
@@ -157,7 +158,7 @@ const AboutUs: React.FC = () => {
             <div className={styles.featureCards}>
               <div className={styles.featureCard}>
                 <div className={styles.featureIconWrapper}>
-                  <span className={styles.featureIcon}>🎯</span>
+                  <span className={styles.featureIcon}><Target size={24} /></span>
                 </div>
                 <div className={styles.featureContent}>
                   <h4 className={styles.featureTitle}>Purpose-Driven</h4>
@@ -170,7 +171,7 @@ const AboutUs: React.FC = () => {
 
               <div className={styles.featureCard}>
                 <div className={styles.featureIconWrapper}>
-                  <span className={styles.featureIcon}>🤝</span>
+                  <span className={styles.featureIcon}><Users size={24} /></span>
                 </div>
                 <div className={styles.featureContent}>
                   <h4 className={styles.featureTitle}>Community First</h4>
@@ -185,8 +186,8 @@ const AboutUs: React.FC = () => {
             {/* CTA Button */}
             <div className={styles.ctaWrapper}>
               <button className={styles.ctaButton} onClick={handleGetStarted}>
-                <span>Start Your Journey - ₦4,000</span>
-                <span className={styles.ctaArrow}>→</span>
+                <span>Start Your Journey</span>
+                <span className={styles.ctaArrow}><ArrowRight size={20} /></span>
               </button>
               <p className={styles.ctaSubtext}>
                 Join 50,000+ students who trust us with their exam prep

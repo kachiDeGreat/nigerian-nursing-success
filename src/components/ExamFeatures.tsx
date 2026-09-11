@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/ExamFeatures.module.css";
 import { useNavigate } from "react-router-dom";
+import { Zap, Target, BookOpen, Clock, RefreshCw, Smartphone } from "lucide-react";
 
 const ExamFeatures: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -63,28 +64,28 @@ const ExamFeatures: React.FC = () => {
 
   const features = [
     {
-      icon: "📚",
+      icon: <BookOpen size={24} />,
       title: "10,000+ Real Exam Questions",
       description:
         "Access our constantly growing database of authentic Nigerian Nursing Council exam questions, carefully curated from past papers and verified by nursing professionals.",
       highlight: "Real Past Questions",
     },
     {
-      icon: "⏱️",
+      icon: <Clock size={24} />,
       title: "Timed Practice Tests",
       description:
         "Experience real exam conditions with our timed tests. Build confidence and master time management skills crucial for success.",
       highlight: "Exam Simulation",
     },
     {
-      icon: "🔄",
+      icon: <RefreshCw size={24} />,
       title: "Unique Question Sets",
       description:
         "Each practice session contains 250 randomly selected questions. With 10,000+ questions in our bank, the odds of seeing repeat questions are incredibly slim.",
       highlight: "Always Fresh",
     },
     {
-      icon: "📱",
+      icon: <Smartphone size={24} />,
       title: "Study Anywhere, Anytime",
       description:
         "Our fully responsive platform works seamlessly on all devices. Study on your phone during commute, tablet at home, or laptop at the library.",
@@ -98,7 +99,7 @@ const ExamFeatures: React.FC = () => {
         {/* Section Header */}
         <div className={styles.header}>
           <div className={styles.headerBadge}>
-            <span className={styles.badgeIcon}>⚡</span>
+            <span className={styles.badgeIcon}><Zap size={16} /></span>
             <span>Platform Features</span>
           </div>
           <h2 className={styles.title}>
@@ -116,7 +117,7 @@ const ExamFeatures: React.FC = () => {
           className={`${styles.counterBox} ${isVisible ? styles.visible : ""}`}
         >
           <div className={styles.counterContent}>
-            <div className={styles.counterIcon}>🎯</div>
+            <div className={styles.counterIcon}><Target size={32} /></div>
             <div className={styles.counterInfo}>
               <div className={styles.counterNumber}>
                 {questionCount.toLocaleString()}+
@@ -233,7 +234,7 @@ const ExamFeatures: React.FC = () => {
             </p>
             <div className={styles.ctaActions}>
               <button className={styles.ctaPrimary} onClick={handleGetStarted}>
-                <span>Get Started - ₦4,000</span>
+                <span>Get Started</span>
                 <span className={styles.buttonArrow}>→</span>
               </button>
               <button
