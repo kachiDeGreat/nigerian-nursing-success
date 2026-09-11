@@ -30,7 +30,7 @@ const Hero: React.FC = () => {
             <div className={styles.mainContent}>
               <div className={styles.textSection}>
                 <div className={styles.badge}>
-                  <Target size={16} style={{ marginRight: '8px' }} />
+                  <Target size={16} style={{ marginRight: "8px" }} />
                   Trusted by 5,000+ Nigerian Nurses
                 </div>
 
@@ -44,11 +44,15 @@ const Hero: React.FC = () => {
 
                 <div className={styles.features}>
                   <div className={styles.feature}>
-                    <span className={styles.featureIcon}><CheckCircle size={16} /></span>
+                    <span className={styles.featureIcon}>
+                      <CheckCircle size={16} />
+                    </span>
                     <span>Real Past Questions</span>
                   </div>
                   <div className={styles.feature}>
-                    <span className={styles.featureIcon}><CheckCircle size={16} /></span>
+                    <span className={styles.featureIcon}>
+                      <CheckCircle size={16} />
+                    </span>
                     <span>Timed Practice Tests</span>
                   </div>
                   {/* <div className={styles.feature}>
@@ -65,7 +69,9 @@ const Hero: React.FC = () => {
                     <span className={styles.buttonText}>
                       Start Learning Now
                     </span>
-                    <span className={styles.buttonArrow}><ArrowRight size={20} /></span>
+                    <span className={styles.buttonArrow}>
+                      <ArrowRight size={20} />
+                    </span>
                   </button>
 
                   <div className={styles.trustIndicators}>
@@ -111,7 +117,9 @@ const Hero: React.FC = () => {
         {/* Scroll Hint */}
         <div className={styles.scrollHint}>
           <span>See how it works</span>
-          <div className={styles.scrollArrow}><ArrowDown size={20} /></div>
+          <div className={styles.scrollArrow}>
+            <ArrowDown size={20} />
+          </div>
         </div>
       </section>
     </>

@@ -118,8 +118,8 @@ export const initializeUserData = async (user: User): Promise<void> => {
       email: user.email!,
       displayName: user.displayName || "",
       emailVerified: user.emailVerified,
-      isActive: false,
-      paymentStatus: "pending",
+      isActive: true,
+      paymentStatus: "paid",
       createdAt: serverTimestamp() as Timestamp,
       lastLogin: serverTimestamp() as Timestamp,
       loginCount: 1,
@@ -142,6 +142,8 @@ export const initializeUserData = async (user: User): Promise<void> => {
       lastLogin: serverTimestamp(),
       loginCount: (existingData.loginCount || 0) + 1,
       emailVerified: user.emailVerified,
+      isActive: true,
+      paymentStatus: "paid",
     });
   }
 };
